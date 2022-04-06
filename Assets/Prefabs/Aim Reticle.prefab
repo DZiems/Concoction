@@ -115,5 +115,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 755ab6f3532af3441b460f4c6026aeef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 5
-  maxRangeFromPlayer: 12
+  moveSpeed: 20
+  maxDistFromPlayer: 5

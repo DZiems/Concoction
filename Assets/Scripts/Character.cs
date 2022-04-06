@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class Character : MonoBehaviour
 {
-    [SerializeField] private AimReticle aimReticlePrefab;
     [SerializeField] private float moveSpeed = 5f;
     public Controller Controller { get; private set; }
     public int PlayerNumber { get; private set; }
@@ -18,7 +17,6 @@ public class Character : MonoBehaviour
 
 
     private Rigidbody2D rb2D;
-    private AimReticle aimReticle;
 
     private void Awake()
     {
@@ -26,20 +24,11 @@ public class Character : MonoBehaviour
         animator = GetComponent<Animator>();
         rb2D = GetComponent<Rigidbody2D>();
 
-        if (aimReticlePrefab == null)
-        {
-            Debug.LogError("Player Awake(): Aim reticle prefab is unassigned!");
-            return;
-        }
-
-        aimReticle = Instantiate(aimReticlePrefab);
-        aimReticle.Initialize(this.Controller, this.transform, PlayerNumber);
     }
 
     private void Start()
     {
         CameraTargetGroupAdder.Instance.AddTarget(this.transform, 1f, 5f);
-
     }
 
     private void FixedUpdate()

@@ -5,19 +5,21 @@ using UnityEngine;
 
 public class AimReticle : MonoBehaviour
 {
-    [SerializeField] private float moveSpeed = 5f;
-    [SerializeField] private float maxDistFromPlayer = 12f;
+    [SerializeField] private float moveSpeed = 20f;
+    [SerializeField] private float maxRange = 8f;
     public Controller Controller { get; private set; }
     public bool IsInitialized => Controller != null && playerTransform != null;
 
     private Vector3 direction;
+    //track position from player
     private Transform playerTransform;
-    private float maxSqDistFromPlayer;
-    private float sqDistFromPlayer;
+    private Vector3 deltaFromPlayer;
+    private float maxSqRange;
+    private float currentSqRange;
 
     private void Awake()
     {
-        maxSqDistFromPlayer = maxDistFromPlayer * maxDistFromPlayer;
+        maxSqRange = maxRange * maxRange;
     }
 
     private void Start()
@@ -30,6 +32,7 @@ public class AimReticle : MonoBehaviour
         if (!IsInitialized) return;
 
         HandleMovement();
+
     }
 
     private void HandleMovement()
@@ -40,24 +43,36 @@ public class AimReticle : MonoBehaviour
         ClampWithinMaxPlayerDist();
     }
 
+    //if outside range of maxDist, clamp to maxDist away
     private void ClampWithinMaxPlayerDist()
     {
-        //vector pointing in the direction of reticle
-        Vector3 delta = transform.position - playerTransform.position;
-        sqDistFromPlayer = (delta.x * delta.x) + (delta.y * delta.y);
-
-        if (sqDistFromPlayer > maxSqDistFromPlayer)
+        UpdateDeltaFromPlayer();
+        if (currentSqRange > maxSqRange)
         {
-            var position = delta;
+            var clampedPosition = deltaFromPlayer.normalized * maxRange;
+            transform.position = playerTransform.position + clampedPosition;
         }
     }
 
+    private void UpdateDeltaFromPlayer()
+    {
+        deltaFromPlayer = transform.position - playerTransform.position;
+        currentSqRange =
+            Mathf.Pow(deltaFromPlayer.x, 2) +
+            Mathf.Pow(deltaFromPlayer.y, 2);
+    }
 
     internal void Initialize(Controller controller, Transform playerTransform, int playerNumber)
     {
         this.Controller = controller;
         this.playerTransform = playerTransform;
         gameObject.name = $"P{playerNumber} Aim Reticle";
+        transform.position = playerTransform.position + Vector3.up;
     }
 
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(playerTransform.position, maxRange);
+    }
 }

@@ -35,7 +35,7 @@ InputManager:
     snap: 0
     invert: 0
     type: 2
-    axis: 4
+    axis: 3
     joyNum: 1
   - serializedVersion: 3
     m_Name: P2Horizontal
@@ -67,7 +67,7 @@ InputManager:
     snap: 0
     invert: 0
     type: 2
-    axis: 4
+    axis: 3
     joyNum: 2
   - serializedVersion: 3
     m_Name: P3Horizontal
@@ -99,7 +99,7 @@ InputManager:
     snap: 0
     invert: 0
     type: 2
-    axis: 4
+    axis: 3
     joyNum: 3
   - serializedVersion: 3
     m_Name: P4Horizontal
@@ -131,7 +131,7 @@ InputManager:
     snap: 0
     invert: 0
     type: 2
-    axis: 4
+    axis: 3
     joyNum: 4
   - serializedVersion: 3
     m_Name: P1Vertical
@@ -163,7 +163,7 @@ InputManager:
     snap: 0
     invert: 1
     type: 2
-    axis: 3
+    axis: 4
     joyNum: 1
   - serializedVersion: 3
     m_Name: P2Vertical
@@ -195,7 +195,7 @@ InputManager:
     snap: 0
     invert: 1
     type: 2
-    axis: 3
+    axis: 4
     joyNum: 2
   - serializedVersion: 3
     m_Name: P3Vertical
@@ -227,7 +227,7 @@ InputManager:
     snap: 0
     invert: 1
     type: 2
-    axis: 3
+    axis: 4
     joyNum: 3
   - serializedVersion: 3
     m_Name: P4Vertical
@@ -259,7 +259,7 @@ InputManager:
     snap: 0
     invert: 1
     type: 2
-    axis: 3
+    axis: 4
     joyNum: 4
   - serializedVersion: 3
     m_Name: P1Interact

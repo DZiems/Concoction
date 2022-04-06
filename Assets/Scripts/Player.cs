@@ -6,17 +6,12 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     [SerializeField] private int playerNumber = 1;
+    [SerializeField] private Vector3 desiredSpawnPoint = new Vector3(2f, 2f, 0f);
 
     public Controller Controller { get; private set; }
 
     public bool HasController => Controller != null;
     public int PlayerNumber => playerNumber;
-
-    private CharacterInstantiator characterInstantiator;
-    private void Awake()
-    {
-        characterInstantiator = GetComponent<CharacterInstantiator>();
-    }
 
     public void InitializePlayer(Controller controller)
     {
@@ -27,7 +22,7 @@ public class Player : MonoBehaviour
 
         gameObject.name = $"Player {PlayerNumber} -- {Controller.gameObject.name}";
 
-        characterInstantiator.SpawnCharacter($"Player {PlayerNumber}", Controller, PlayerNumber);
+        CharacterInstantiator.Instance.SpawnCharacter($"Player {PlayerNumber}", Controller, PlayerNumber, desiredSpawnPoint);
     }
 
 
