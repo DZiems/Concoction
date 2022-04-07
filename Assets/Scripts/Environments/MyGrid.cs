@@ -71,10 +71,11 @@ public class MyGrid<TGridObject>
         return new Vector3(x, y) * cellSize + originPosition;
     }
 
-    private void GetXY(Vector3 worldPosition, out int x, out int y)
+    private Tuple<int, int> GetXY(Vector3 worldPosition)
     {
-        x = Mathf.FloorToInt((worldPosition - originPosition).x / cellSize);
-        y = Mathf.FloorToInt((worldPosition - originPosition).y / cellSize);
+        int x = Mathf.FloorToInt((worldPosition - originPosition).x / cellSize);
+        int y = Mathf.FloorToInt((worldPosition - originPosition).y / cellSize);
+        return new Tuple<int, int>(x, y);
     }
 
     private void CreateDebugText(int x, int y, string value, int fontSize)
@@ -117,15 +118,13 @@ public class MyGrid<TGridObject>
 
     public void SetGridObject(Vector3 worldPosition, TGridObject value)
     {
-        int x, y;
-        GetXY(worldPosition, out x, out y);
-        SetGridObject(x, y, value);
+        var xy = GetXY(worldPosition);
+        SetGridObject(xy.Item1, xy.Item2, value);
     }
     public TGridObject GetGridObject(Vector3 worldPosition)
     {
-        int x, y;
-        GetXY(worldPosition, out x, out y);
-        return GetGridObject(x, y);
+        var xy = GetXY(worldPosition);
+        return GetGridObject(xy.Item1, xy.Item2);
     }
 
     private bool CoordinatesAreValid(int x, int y)

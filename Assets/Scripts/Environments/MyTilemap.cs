@@ -18,9 +18,7 @@ public class MyTilemap
     public bool showDebug;
 
     /*
-    parameter createGridObject is a delegate, like action, except it has a return val (TGridObject).
-    for an int, () => { return 0; }
-    for a custom object, () => { return new TGridObject(); } 
+    parameter tileCreater is a delegate, like action, except it has a return val (Tile).
      */
 
     public MyTilemap(
@@ -76,9 +74,9 @@ public class MyTilemap
     }
     public Tile GetGridObject(Vector3 worldPosition)
     {
-        int x, y;
-        GetXY(worldPosition, out x, out y);
-        return GetGridObject(x, y);
+
+        var xy = GetXY(worldPosition);
+        return GetGridObject(xy.Item1, xy.Item2);
     }
 
 
@@ -87,10 +85,11 @@ public class MyTilemap
         return new Vector3(x, y) * cellSize + originPosition;
     }
 
-    private void GetXY(Vector3 worldPosition, out int x, out int y)
+    private Tuple<int, int> GetXY(Vector3 worldPosition)
     {
-        x = Mathf.FloorToInt((worldPosition - originPosition).x / cellSize);
-        y = Mathf.FloorToInt((worldPosition - originPosition).y / cellSize);
+        var x = Mathf.FloorToInt((worldPosition - originPosition).x / cellSize);
+        var y = Mathf.FloorToInt((worldPosition - originPosition).y / cellSize);
+        return new Tuple<int, int>(x, y);
     }
 
     private void CreateDebugText(int x, int y, string value, int fontSize)
@@ -117,18 +116,5 @@ public class MyTilemap
         return x >= 0 && y >= 0 && x < width && y < height;
     }
 
-    //unused: places newly generated game object (not prefab) on the cell at x, y
-    private void BuildCell(Sprite cellSprite, int x, int y)
-    {
-        if (!CoordinatesAreValid(x, y)) return;
-        GameObject gameObject = new GameObject("Ground Tile");
-        if (cellSprite != null)
-        {
-            SpriteRenderer spriteRenderer = gameObject.AddComponent<SpriteRenderer>() as SpriteRenderer;
-            spriteRenderer.sprite = cellSprite;
-        }
-        Vector3 offset = new Vector3(cellSize, cellSize) * 0.5f;
-        Transform transform = gameObject.transform;
-        transform.localPosition = GetWorldPosition(x, y) + offset;
-    }
+   
 }

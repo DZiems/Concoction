@@ -3,10 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WallBorderTilemap : MonoBehaviour
+public class WallTilemap : MonoBehaviour
 {
     private MyTilemap tilemap;
-    private MyGrid<Side> test;
     public static Dictionary<string, string> TileNames { get; private set; }
 
     public enum Side
@@ -22,9 +21,8 @@ public class WallBorderTilemap : MonoBehaviour
         None
     }
 
-    //for now, only use the first tile type provided.
-    //Later, use a tilemap for different flooring tiles (if a floor has more than one flooring tile)
-    public void Build(int width, int height, float cellSize, Vector3 originPosition, bool showDebug,Tile wallTile, Tile wallCornerTile, Side entrance, int entranceSize)
+    //TODO: build based on a boolean map, and determine whether something is a corner based on having perpendicular adjacencies. Determine side as well?
+    public void BuildRect(int width, int height, float cellSize, Vector3 originPosition, bool showDebug,Tile wallTile, Tile wallCornerTile, Side entrance, int entranceSize)
     {
         if (!DimensionsAreValid(width, height)) return;
         if (wallTile == null || wallCornerTile == null) return;

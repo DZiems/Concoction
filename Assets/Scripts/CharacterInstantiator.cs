@@ -5,7 +5,7 @@ using UnityEngine;
 public class CharacterInstantiator : MonoBehaviour
 {
     public static CharacterInstantiator Instance;
-    //later, build out the character from a file
+    //TODO: build out character from a file
     [SerializeField] private Character characterPrefab;
     [SerializeField] private AimReticle aimReticlePrefab;
 

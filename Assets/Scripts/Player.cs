@@ -13,6 +13,7 @@ public class Player : MonoBehaviour
     public bool HasController => Controller != null;
     public int PlayerNumber => playerNumber;
 
+    //TODO: bring up account select panel
     public void InitializePlayer(Controller controller)
     {
         Controller = controller;

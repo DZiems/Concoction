@@ -1,19 +1,22 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Station : Tile
+
+
+public class Station : MonoBehaviour
 {
     [SerializeField] private int tiledWidth = 1;
     [SerializeField] private int tiledHeight = 1;
 
+    //TODO: could turn into a queue where startIndex + count % capacity determines loop; helps with garbage collection
     private List<Character> charactersInsideUseSpace;
 
-    protected override void Awake()
+    private void Awake()
     {
-        base.Awake();
         charactersInsideUseSpace = new List<Character>();
-        charactersInsideUseSpace.Capacity = 4;  //TOTAL_NUM_PLAYERS
+        charactersInsideUseSpace.Capacity = 4;  //TODO: replace with TOTAL_NUM_PLAYERS
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -56,6 +59,33 @@ public class Station : Tile
                 }
             }
         }
+    }
+
+    public Tuple<int, int>[] tilesOccupied(int originX, int originY, TileRotateTool.Dir rotationDir)
+    {
+        var occupanices = new Tuple<int, int>[tiledHeight * tiledWidth];
+
+        if (rotationDir == TileRotateTool.Dir.Top)
+            for (int i = 0; i < tiledWidth; i++)
+                for (int j = 0; j < tiledHeight; j++)
+                    occupanices[i] = new Tuple<int, int>(originX + i, originY + j);
+
+        else if (rotationDir == TileRotateTool.Dir.Right)
+            for (int i = 0; i < tiledWidth; i++)
+                for (int j = 0; j < tiledHeight; j++)
+                    occupanices[i] = new Tuple<int, int>(originX + i, originY - j);
+
+        else if (rotationDir == TileRotateTool.Dir.Bottom)
+            for (int i = 0; i < tiledWidth; i++)
+                for (int j = 0; j < tiledHeight; j++)
+                    occupanices[i] = new Tuple<int, int>(originX - i, originY - j);
+
+        else if (rotationDir == TileRotateTool.Dir.Left)
+            for (int i = 0; i < tiledWidth; i++)
+                for (int j = 0; j < tiledHeight; j++)
+                    occupanices[i] = new Tuple<int, int>(originX - i, originY + j);
+
+        return occupanices;
     }
 
 }

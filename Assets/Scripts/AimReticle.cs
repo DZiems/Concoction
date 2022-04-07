@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class AimReticle : MonoBehaviour
 {
+    //TODO: draw arc of circle when close to max range boundary
     [SerializeField] private float moveSpeed = 20f;
     [SerializeField] private float maxRange = 8f;
     public Controller Controller { get; private set; }
