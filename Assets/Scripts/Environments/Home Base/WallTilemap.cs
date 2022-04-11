@@ -22,7 +22,7 @@ public class WallTilemap : MonoBehaviour
     }
 
     //TODO: build based on a boolean map, and determine whether something is a corner based on having perpendicular adjacencies. Determine side as well?
-    public void BuildRect(int width, int height, float cellSize, Vector3 originPosition, bool showDebug,Tile wallTile, Tile wallCornerTile, Side entrance, int entranceSize)
+    public void BuildRectWithEntrance(int width, int height, float cellSize, Vector3 originPosition, bool showDebug,Tile wallTile, Tile wallCornerTile, Side entrance, int entranceSize)
     {
         if (!DimensionsAreValid(width, height)) return;
         if (wallTile == null || wallCornerTile == null) return;
@@ -48,16 +48,37 @@ public class WallTilemap : MonoBehaviour
                 }
             });
     }
+    public void BuildRect(int width, int height, float cellSize, Vector3 originPosition, bool showDebug, Tile wallTile, Tile wallCornerTile)
+    {
+        if (!DimensionsAreValid(width, height)) return;
+        if (wallTile == null || wallCornerTile == null) return;
+
+        tilemap = new MyTilemap(width, height, cellSize, originPosition, showDebug,
+            (x, y) =>
+            {
+                Side wallSide = DetermineSide(width, height, x, y);
+
+                if (wallSide != Side.None)
+                {
+                    var tile = Instantiate((IsACorner(wallSide) ? wallCornerTile : wallTile), this.transform);
+                    tile.transform.position = DetermineWorldPosition(cellSize, originPosition, x, y);
+                    tile.transform.Rotate(DetermineRotation(wallSide));
+                    if (showDebug)
+                        tile.gameObject.name = $"{wallSide} ({x}, {y})";
+
+                    return tile;
+                }
+                else
+                {
+                    return null;
+                }
+            });
+    }
 
     private bool DimensionsAreValid(int width, int height)
     {
         return width > 0 && height > 0;
     }
-    private bool CoordinatesAreValid(int x, int y, int width, int height)
-    {
-        return x >= 0 && y >= 0 && x < width && y < height;
-    }
-
     private bool IsAnEntranceXY(Side entrance, int entranceSize, int width, int height, int x, int y)
     {
         int entranceStartX, entranceStartY;
@@ -85,23 +106,6 @@ public class WallTilemap : MonoBehaviour
         }
 
     }
-
-    public void Build(int width, int height, float cellSize, Vector3 originPosition, bool showDebug, Dictionary<string, Tile> tilesDictionary, string[,] tilemapGrid)
-    {
-        if (tilemapGrid.GetLength(0) != width || tilemapGrid.GetLength(1) != height)
-        {
-            Debug.LogError($"FloorTilemap.Build(): provided tilemapGrid was not the correct dimensions. Needed: ({width}, {height}); Got: {tilemapGrid.GetLength(0)}, {tilemapGrid.GetLength(1)}");
-            return;
-        }
-        if (tilesDictionary.Count <= 0)
-        {
-            Debug.LogError("FloorTilemap.Build(): provided tilesDictionary was empty!");
-            return;
-        }
-
-        // build out tilemap...
-    }
-
 
     private static Vector3 DetermineWorldPosition(float cellSize, Vector3 originPosition, int x, int y)
     {

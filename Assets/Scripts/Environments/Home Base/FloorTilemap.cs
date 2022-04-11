@@ -15,16 +15,17 @@ public class FloorTilemap : MonoBehaviour
         if (!DimensionsAreValid(width, height)) return;
 
         tilemap = new MyTilemap(width, height, cellSize, originPosition, showDebug,
-            (x, y) => {
+            (x, y) =>
+            {
                 var tile = Instantiate(floorTile, this.transform);
                 tile.transform.position = DetermineWorldPosition(cellSize, originPosition, x, y);
                 if (showDebug)
                     tile.gameObject.name = $"Floor ({x}, {y})";
                 return tile;
-;            });
+            });
     }
 
-    
+
     private bool DimensionsAreValid(int width, int height)
     {
         return width > 0 && height > 0;
@@ -39,7 +40,7 @@ public class FloorTilemap : MonoBehaviour
         return new Vector3(x, y) * cellSize + originPosition + (new Vector3(cellSize, cellSize) * 0.5f);
     }
 
-    private Tile GetTile(int x, int y, string [,] mapGrid, Dictionary<string, Tile> dictionary)
+    private Tile GetTile(int x, int y, string[,] mapGrid, Dictionary<string, Tile> dictionary)
     {
         return dictionary[mapGrid[x, y]];
     }

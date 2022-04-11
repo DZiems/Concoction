@@ -46,19 +46,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   origin: {x: 0, y: 0, z: 0}
-  width: 15
-  height: 10
+  width: 12
+  height: 8
   cellSize: 1
-  doorLength: 6
-  entranceSide: 6
   tilePrefabs:
   - {fileID: 6257688382925018515, guid: cdf93c4f529e8c34d9395b5303dd6129, type: 3}
   - {fileID: 3163467979380474843, guid: 8a2fcd89f902ecf41b442e4894a3ec32, type: 3}
   - {fileID: 4843291322893898918, guid: eb13836928b04a646bf91881904ca208, type: 3}
   stationPrefabs:
-  - {fileID: 6533386178146529110, guid: 9b0a258cd7a2b2147aee44ead4914d18, type: 3}
-  - {fileID: 2589269281133169715, guid: 00b95db87dcc06f46b92784fc77c4194, type: 3}
-  - {fileID: 8108207973474407506, guid: eefdab585eef6974d8dc928dba04adb3, type: 3}
+  - {fileID: 713778995494271073, guid: 9b0a258cd7a2b2147aee44ead4914d18, type: 3}
+  - {fileID: 8693890689098896881, guid: 00b95db87dcc06f46b92784fc77c4194, type: 3}
+  - {fileID: 7936510601330049648, guid: eefdab585eef6974d8dc928dba04adb3, type: 3}
 --- !u!1 &2204734566921572631
 GameObject:
   m_ObjectHideFlags: 0
