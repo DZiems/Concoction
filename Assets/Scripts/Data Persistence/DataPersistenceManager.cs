@@ -8,6 +8,8 @@ public class DataPersistenceManager : MonoBehaviour
 {
     [Header("File Storage Config")]
     [SerializeField] private string fileName;
+
+
     //might eventually need to be multiple file data handlers if storing player and homebase etc. in different files. Or otherwise find a way to check for individually deserialized objects and construct their defaults.
     FileDataHandler fileDataHandler;
 
@@ -20,15 +22,21 @@ public class DataPersistenceManager : MonoBehaviour
     {
         if (Instance != null)
         {
-            Debug.LogError("Found more than one DataPersistenceManager in the scene.");
+            Debug.Log("Found more than one DataPersistenceManager in the scene. Destroying the newest one");
+            Destroy(gameObject);
+            return;
         }
+
         Instance = this;
+        DontDestroyOnLoad(gameObject);
+
+        this.fileDataHandler = new FileDataHandler(Application.persistentDataPath, fileName);
     }
 
-    private void Start()
+    public void OnSceneLoaded()
     {
-        this.fileDataHandler = new FileDataHandler(Application.persistentDataPath, fileName);
         this.dataPersistenceObjects = FindAllDataPersistenceObjects();
+        //first load
         LoadGame();
     }
 
@@ -69,6 +77,7 @@ public class DataPersistenceManager : MonoBehaviour
         {
             dpObj.SaveData(gameData);
         }
+
         //Save that data to a file using the data handler
         fileDataHandler.Save(gameData);
     }

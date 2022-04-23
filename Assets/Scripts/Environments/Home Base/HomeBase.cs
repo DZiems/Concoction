@@ -23,7 +23,7 @@ public class HomeBase : MonoBehaviour, IDataPersistence
 
     private FloorTilemap floorTilemap;
     private WallTilemap wallTilemap;
-    private bool isBuilt;
+    private bool isLoaded;
 
     public int Width => width;
     public int Height => height;
@@ -34,11 +34,12 @@ public class HomeBase : MonoBehaviour, IDataPersistence
 
     private void Awake()
     {
-        isBuilt = false;
+        isLoaded = false;
         floorTilemap = GetComponentInChildren<FloorTilemap>();
         wallTilemap = GetComponentInChildren<WallTilemap>();
         InitializeDictionaries();
     }
+
     private void InitializeDictionaries()
     {
         stationsDictionary = new Dictionary<string, Station>();
@@ -71,6 +72,8 @@ public class HomeBase : MonoBehaviour, IDataPersistence
         origin = new Vector3(data.HomeBaseData.origin[0], data.HomeBaseData.origin[1]);
 
         Build(data.HomeBaseData.stationData);
+
+        isLoaded = true;
     }
 
     public void SaveData(GameData data)
@@ -78,15 +81,12 @@ public class HomeBase : MonoBehaviour, IDataPersistence
         data.HomeBaseData = new HomeBaseData(this);
     }
 
-
     private void Build(StationData[] stationData)
     {
         BuildStations(stationData);
         bool showDebug = false;
         BuildFloors(showDebug);
         BuildWalls(showDebug);
-
-        isBuilt = true;
     }
 
     private void BuildWalls(bool showDebug)
@@ -127,7 +127,7 @@ public class HomeBase : MonoBehaviour, IDataPersistence
 
     private void Update()
     {
-        if (isBuilt)
+        if (isLoaded)
         {
             foreach (var station in stations)
             {

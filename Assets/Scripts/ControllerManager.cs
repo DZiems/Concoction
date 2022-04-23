@@ -1,56 +1,68 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+using System;
 using UnityEngine;
 
 public class ControllerManager : MonoBehaviour
 {
-    private Controller[] _controllers;
-    private bool _canAssignController; //make this a property of GameManager, which can track whether on an adventure, or in combat, or something
+    public static ControllerManager Instance { get; private set; }
+    private Controller[] controllers;
+
 
     private void Awake()
     {
-        _canAssignController = true;
-        _controllers = FindObjectsOfType<Controller>();
+        if (Instance != null)
+        {
+            Debug.Log("Found more than one ControllerManager in the scene. Destroying the newest one");
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+
+        controllers = GetComponentsInChildren<Controller>();
+
+        DontDestroyOnLoad(gameObject);
     }
 
     private void Start()
     {
         var index = 1;
-        foreach (var controller in _controllers)
+        foreach (var controller in controllers)
         {
-            controller.SetIndex(index);
+            controller.SetId(index);
             index++;
         }
     }
 
     private void Update()
     {
-        if (_canAssignController)
-            HandleUnassignedControllers();
+        HandleUnassignedControllers();
     }
 
     private void HandleUnassignedControllers()
     {
-        foreach (var controller in _controllers)
-        {
-            if (ControllerShouldBeAssigned(controller))
-            {
+        foreach (var controller in controllers)
+            if (ControllerNeedsAssign(controller))
                 AssignController(controller);
-            }
-        }
-
     }
 
-    private bool ControllerShouldBeAssigned(Controller controller)
+    private bool ControllerNeedsAssign(Controller controller)
     {
-        return !controller.IsAssigned && controller.InteractDown;
+        return !controller.IsAssigned && controller.AnyButtonDown();
     }
 
     private void AssignController(Controller controller)
     {
         controller.IsAssigned = true;
 
-        PlayerManager.Instance.AddPlayerToGame(controller);
+        Debug.Log($"ControllerManager: assigning new player Controller {controller.Id}");
+
+        PlayerManager.Instance.AssignController(controller);
+    }
+
+    internal void UnassignController(int id)
+    {
+        int index = id - 1;
+        Debug.Log($"Unassigning Controller: {controllers[index].gameObject.name}");
+        controllers[index].IsAssigned = false;
     }
 }

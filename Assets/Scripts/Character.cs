@@ -7,15 +7,14 @@ public class Character : MonoBehaviour
 {
     [SerializeField] private float moveSpeed = 5f;
     public Controller Controller { get; private set; }
-    public int PlayerNumber { get; private set; }
     public bool HasController => Controller != null;
+
+    public string ProfileName { get; private set; }
 
     private Vector3 direction;
 
     private Animator animator;
     private SpriteRenderer spriteRenderer;
-
-
     private Rigidbody2D rb2D;
 
     private void Awake()
@@ -62,9 +61,5 @@ public class Character : MonoBehaviour
     internal void SetController(Controller controller)
     {
         this.Controller = controller;
-    }
-    internal void SetPlayerNumber(int playerNumber)
-    {
-        PlayerNumber = playerNumber;
     }
 }
