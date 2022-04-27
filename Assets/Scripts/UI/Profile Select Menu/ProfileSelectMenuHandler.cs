@@ -147,7 +147,16 @@ public class ProfileSelectMenuHandler : MonoBehaviour
     {
         if (playerOne.Controller.InteractDown || playerOne.Controller.StartDown)
         {
+            AssignAllPlayerAccounts();
             GameManager.Instance.GoToMostRecentScene();
+        }
+    }
+
+    private void AssignAllPlayerAccounts()
+    {
+        foreach (var kvp in currentProfileSelectors)
+        {
+            PlayerManager.Instance.AssignPlayerAProfile(kvp.Key, kvp.Value.profileChosen);
         }
     }
 }

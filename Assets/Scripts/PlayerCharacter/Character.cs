@@ -1,0 +1,73 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Character : MonoBehaviour
+{
+    [SerializeField] private float moveSpeed = 5f;
+    public Controller Controller { get; private set; }
+
+    public string ProfileName { get; set; }
+
+    private Vector3 direction;
+
+    private Animator animator;
+    private SpriteRenderer spriteRenderer;
+    private Rigidbody2D rb2D;
+
+
+    private bool isInitialized;
+
+    private void Awake()
+    {
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        animator = GetComponent<Animator>();
+        rb2D = GetComponent<Rigidbody2D>();
+
+        isInitialized = false;
+    }
+
+    private void Start()
+    {
+        CameraTargetGroupAdder.Instance.AddTarget(this.transform, 1f, 5f);
+    }
+
+    private void FixedUpdate()
+    {
+        if (!isInitialized) return;
+
+        HandleMovement();
+    }
+
+    private void Update()
+    {
+        HandleAnimation();
+    }
+
+    private void HandleMovement()
+    {
+        direction = Vector3.ClampMagnitude(Controller.GetDirection(), 1);
+        rb2D.MovePosition(transform.position + (direction * Time.deltaTime * moveSpeed));
+    }
+
+    private void HandleAnimation()
+    {
+        if (direction.magnitude != 0)
+        {
+            spriteRenderer.flipX = direction.x < 0;
+            animator.SetFloat("Direction", Vector2.Dot(direction.normalized, transform.up));
+        }
+        animator.SetFloat("Speed", direction.magnitude);
+    }
+
+    internal void Initialize(Player player)
+    {
+        this.Controller = player.Controller;
+        gameObject.name = $"(P{player.PlayerNumber}: {player.ProfileData.profileName}) Character";
+
+        spriteRenderer.color = player.ProfileData.profileColor;
+
+        isInitialized = true;
+    }
+}

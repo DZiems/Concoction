@@ -59,6 +59,9 @@ public class ProfileSelectorMenu : MonoBehaviour
     public event Action<Player> onConfirmSelected;
     public event Action<Player> onConfirmCanceled;
 
+    //profile
+    public string profileChosen => dropdown.CurrentItem;
+
     private void Awake()
     {
         mainAnimator = allContents.GetComponent<Animator>();
@@ -91,7 +94,7 @@ public class ProfileSelectorMenu : MonoBehaviour
 
     private void Start()
     {
-        allPlayerCharacterData = PlayerManager.Instance.GetAllPlayerCharacterData();
+        allPlayerCharacterData = PlayerManager.Instance.AllPlayerCharacterData;
 
         //initialize dropdown data
         dropdown.SetItems(allPlayerCharacterData.Keys.ToList());
@@ -381,6 +384,7 @@ public class ProfileSelectorMenu : MonoBehaviour
             Debug.LogError("ProfileSelectorMenu onConfirmSelected() was null!");
 
         HasConfirmed = true;
+        HoverIndexedButton(false);
 
         mainAnimator.SetTrigger("HasConfirmed");
     }

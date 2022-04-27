@@ -76,7 +76,7 @@ SpriteRenderer:
   m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 574f6ba19369a674cba65597b71c22da, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.7, g: 0.7, b: 0.7, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -98,7 +98,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90988719ca2c60c4696ee6fbcb7f8df2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  aimReticlePrefab: {fileID: 7208940011296348762, guid: cbf273bd5cbef3241a1a59654fc90d66, type: 3}
   moveSpeed: 5
 --- !u!95 &1003767184172790517
 Animator:

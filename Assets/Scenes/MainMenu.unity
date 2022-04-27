@@ -152,8 +152,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bed50a4b7fae9f7428a19ba46544f20a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterPrefab: {fileID: 5480088978416400395, guid: 88052eeacbefc8a4291bf5d22d8c12b6, type: 3}
-  aimReticlePrefab: {fileID: 7208940011296348762, guid: cbf273bd5cbef3241a1a59654fc90d66, type: 3}
+  baseCharacterPrefab: {fileID: 5480088978416400395, guid: 88052eeacbefc8a4291bf5d22d8c12b6, type: 3}
+  baseAimReticlePrefab: {fileID: 7208940011296348762, guid: cbf273bd5cbef3241a1a59654fc90d66, type: 3}
 --- !u!4 &16084602
 Transform:
   m_ObjectHideFlags: 0
