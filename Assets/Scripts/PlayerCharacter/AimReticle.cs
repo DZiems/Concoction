@@ -6,15 +6,21 @@ using UnityEngine;
 public class AimReticle : MonoBehaviour
 {
     //TODO: draw arc of circle when close to max range boundary
-    [SerializeField] private float moveSpeed = 20f;
-    [SerializeField] private float maxRange = 8f;
+    [Header("Movement")]
+    [SerializeField] private float moveSpeed = 7f;
+    [SerializeField] private float boostedMoveSpeed = 20f;
+
+    [Header("Camera")]
+    [SerializeField] private float cameraRadius = 2f;
+
+
     private Controller controller;
     private bool isInitialized;
 
     private Vector3 direction;
 
     //track position from player
-    private Transform characterTransform;
+    private Character character;
     private Vector3 deltaFromPlayer;
     private float maxSqRange;
     private float currentSqRange;
@@ -23,7 +29,6 @@ public class AimReticle : MonoBehaviour
 
     private void Awake()
     {
-        maxSqRange = maxRange * maxRange;
         spriteRenderer = GetComponent<SpriteRenderer>();
 
         isInitialized = false;
@@ -31,7 +36,7 @@ public class AimReticle : MonoBehaviour
 
     private void Start()
     {
-        CameraTargetGroupAdder.Instance.AddTarget(this.transform, 1f, 2f);
+        CameraTargetGroupAdder.Instance.AddTarget(this.transform, 1f, cameraRadius);
     }
 
     private void Update()
@@ -56,14 +61,14 @@ public class AimReticle : MonoBehaviour
         UpdateDeltaFromPlayer();
         if (currentSqRange > maxSqRange)
         {
-            var clampedPosition = deltaFromPlayer.normalized * maxRange;
-            transform.position = characterTransform.position + clampedPosition;
+            var clampedPosition = deltaFromPlayer.normalized * character.AimReticleRange;
+            transform.position = character.transform.position + clampedPosition;
         }
     }
 
     private void UpdateDeltaFromPlayer()
     {
-        deltaFromPlayer = transform.position - characterTransform.position;
+        deltaFromPlayer = transform.position - character.transform.position;
         currentSqRange =
             Mathf.Pow(deltaFromPlayer.x, 2) +
             Mathf.Pow(deltaFromPlayer.y, 2);
@@ -73,9 +78,12 @@ public class AimReticle : MonoBehaviour
     {
         //player
         this.controller = player.Controller;
-        this.characterTransform = player.Character.transform;
+        this.character = player.Character;
         gameObject.name = $"(P{player.PlayerNumber}: {player.ProfileData.profileName}) Aim Reticle";
-        transform.position = characterTransform.position + Vector3.up;
+        transform.position = character.transform.position + Vector3.up;
+
+        //cached values
+        maxSqRange = character.AimReticleRange * character.AimReticleRange;
 
         //profile data
         spriteRenderer.color = player.ProfileData.aimReticleColor;
@@ -88,6 +96,6 @@ public class AimReticle : MonoBehaviour
         if (!isInitialized) return;
 
         Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(characterTransform.position, maxRange);
+        Gizmos.DrawWireSphere(character.transform.position, character.AimReticleRange);
     }
 }

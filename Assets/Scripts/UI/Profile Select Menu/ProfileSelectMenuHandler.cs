@@ -92,6 +92,8 @@ public class ProfileSelectMenuHandler : MonoBehaviour
         {
             if (player == PlayerManager.Instance.PlayerOne)
             {
+                foreach (var profileMenu in currentProfileSelectors.Values)
+                    Destroy(profileMenu.gameObject);
                 GameManager.Instance.ResetGameToMainMenu();
             }
             else

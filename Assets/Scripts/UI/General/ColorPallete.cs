@@ -18,4 +18,8 @@ public static class ColorPallete
     public static readonly Color dropdownTextNormal = new Color(0.75f, 0.75f, 0.75f, 1);
 
     public static readonly Color alphabetFieldBackground = new Color(0.2f, 0.2f, 0.2f, 1f);
+
+    public static readonly Color healthBarColor = new Color(1.0f, 0.2f, 0.2f, 1f);
+    public static readonly Color healthBarDamageColor = new Color(1.0f, 0.7f, 0.2f, 1f);
+    public static readonly Color healthBarHealColor = new Color(0.2f, 1.0f, 0.3f, 1f);
 }

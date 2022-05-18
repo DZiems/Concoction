@@ -57,6 +57,31 @@ public class Player : MonoBehaviour
         aimReticle.Initialize(this);
 
     }
+    public void SpawnCharacter(Vector2 position)
+    {
+        if (IsCharacterSpawned)
+        {
+            Debug.LogError($"Attempted to spawn a duplicate character for player {PlayerNumber}");
+            return;
+        }
+        if (!HasController)
+        {
+            Debug.LogError($"Attempted to spawn a character before player has been assigned a controller (player {PlayerNumber})");
+            return;
+        }
+        if (!HasProfile)
+        {
+            Debug.LogError($"Attempted to spawn a character before player has been assigned a profile (player {PlayerNumber})");
+            return;
+        }
+
+        Character = Instantiate(PlayerManager.Instance.BaseCharacterPrefab, position, Quaternion.identity);
+        Character.Initialize(this);
+
+        aimReticle = Instantiate(PlayerManager.Instance.BaseAimReticlePrefab);
+        aimReticle.Initialize(this);
+
+    }
 
     public void RemoveFromGame()
     {

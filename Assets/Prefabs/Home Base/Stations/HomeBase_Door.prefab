@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5344254545904929005}
   - component: {fileID: 713778995494271073}
+  - component: {fileID: 4026654956005349446}
   m_Layer: 0
   m_Name: HomeBase_Door
   m_TagString: Untagged
@@ -46,6 +47,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tiledWidth: 2
   tiledHeight: 1
+--- !u!61 &4026654956005349446
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4539143994112105734}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 1, y: -0.1875}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 2, y: 1}
+    newSize: {x: 6.4, y: 3.2}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 2, y: 0.375}
+  m_EdgeRadius: 0
 --- !u!1 &7854214055129711107
 GameObject:
   m_ObjectHideFlags: 0
@@ -57,7 +84,6 @@ GameObject:
   - component: {fileID: 2620477580274955351}
   - component: {fileID: 7990024982791993838}
   - component: {fileID: 2273659255338779619}
-  - component: {fileID: 2489026088179179260}
   m_Layer: 0
   m_Name: HomeBase_Door
   m_TagString: Untagged
@@ -144,32 +170,6 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: -0.3125}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 2, y: 1}
-    newSize: {x: 6.4, y: 3.2}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 2, y: 0.375}
-  m_EdgeRadius: 0
---- !u!61 &2489026088179179260
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7854214055129711107}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.6875}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}

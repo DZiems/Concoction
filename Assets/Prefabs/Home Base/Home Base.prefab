@@ -49,10 +49,9 @@ MonoBehaviour:
   width: 12
   height: 8
   cellSize: 1
-  tilePrefabs:
-  - {fileID: 6257688382925018515, guid: cdf93c4f529e8c34d9395b5303dd6129, type: 3}
-  - {fileID: 3163467979380474843, guid: 8a2fcd89f902ecf41b442e4894a3ec32, type: 3}
-  - {fileID: 4843291322893898918, guid: eb13836928b04a646bf91881904ca208, type: 3}
+  floorPrefab: {fileID: 6257688382925018515, guid: cdf93c4f529e8c34d9395b5303dd6129, type: 3}
+  wallPrefab: {fileID: 3163467979380474843, guid: 8a2fcd89f902ecf41b442e4894a3ec32, type: 3}
+  wallCornerPrefab: {fileID: 4843291322893898918, guid: eb13836928b04a646bf91881904ca208, type: 3}
   stationPrefabs:
   - {fileID: 713778995494271073, guid: 9b0a258cd7a2b2147aee44ead4914d18, type: 3}
   - {fileID: 8693890689098896881, guid: 00b95db87dcc06f46b92784fc77c4194, type: 3}

@@ -33,7 +33,7 @@ public class PlayerManager : MonoBehaviour, IDataPersistence
         foreach (var kvp in data.AllPlayerCharacterData)
         {
             Debug.Log($"{kvp.Key}: \n\tname: {kvp.Value.profileName}, " +
-                $"\n\tprofile color: {kvp.Value.profileColor}" +
+                $"\n\tprofile color: {kvp.Value.robesColor}" +
                 $"\n\treticle color: {kvp.Value.aimReticleColor}");
             AllPlayerCharacterData.Add(kvp.Key, kvp.Value);
         }
@@ -175,7 +175,7 @@ public class PlayerManager : MonoBehaviour, IDataPersistence
     }
 
 
-   
+
 
     public void AssignPlayerAProfile(Player player, string profileName)
     {

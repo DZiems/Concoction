@@ -5,32 +5,74 @@ using UnityEngine;
 
 public class Character : MonoBehaviour
 {
+    [Header("Movement")]
     [SerializeField] private float moveSpeed = 5f;
+
+    [Header("Aim Reticle")]
+    [SerializeField] private float aimReticleRange = 7f;
+
+    [Header("Camera")]
+    [SerializeField] private float cameraRadius = 10f;
+
+    [Header("References")]
+    [SerializeField] private SpriteRenderer blushSpriteRend;
+    [SerializeField] private SpriteRenderer faceSpriteRend;
+    [SerializeField] private SpriteRenderer feetSpriteRend;
+    [SerializeField] private SpriteRenderer goggleFrameSpriteRend;
+    [SerializeField] private SpriteRenderer goggleLensSpriteRend;
+    [SerializeField] private SpriteRenderer handsSpriteRend;
+    [SerializeField] private SpriteRenderer robesSpriteRend;
+
+
     public Controller Controller { get; private set; }
 
     public string ProfileName { get; set; }
+    public float AimReticleRange => aimReticleRange;
 
     private Vector3 direction;
 
-    private Animator animator;
-    private SpriteRenderer spriteRenderer;
     private Rigidbody2D rb2D;
+    private Animator animator;
+    public Health Health { get; private set; }
 
 
     private bool isInitialized;
 
     private void Awake()
     {
-        spriteRenderer = GetComponent<SpriteRenderer>();
-        animator = GetComponent<Animator>();
         rb2D = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
+        Health = GetComponent<Health>();
 
         isInitialized = false;
     }
 
+
+
     private void Start()
     {
-        CameraTargetGroupAdder.Instance.AddTarget(this.transform, 1f, 5f);
+        CameraTargetGroupAdder.Instance.AddTarget(this.transform, 1f, cameraRadius);
+    }
+
+    private void OnEnable()
+    {
+        Health.onDamaged += TakeDamage;
+        Health.onComboed += TakeCombo;
+        Health.onKilled += Kill;
+    }
+
+    private void TakeDamage()
+    {
+        Debug.Log("Do something");
+    }
+    private void TakeCombo()
+    {
+
+        Debug.Log("Do something unfortunate");
+    }
+    private void Kill()
+    {
+        Debug.Log("Do something mega unfortunate");
     }
 
     private void FixedUpdate()
@@ -42,6 +84,7 @@ public class Character : MonoBehaviour
 
     private void Update()
     {
+        if (!isInitialized) return;
         HandleAnimation();
     }
 
@@ -55,7 +98,7 @@ public class Character : MonoBehaviour
     {
         if (direction.magnitude != 0)
         {
-            spriteRenderer.flipX = direction.x < 0;
+            setSpritesFlipX(direction.x < 0);
             animator.SetFloat("Direction", Vector2.Dot(direction.normalized, transform.up));
         }
         animator.SetFloat("Speed", direction.magnitude);
@@ -66,8 +109,19 @@ public class Character : MonoBehaviour
         this.Controller = player.Controller;
         gameObject.name = $"(P{player.PlayerNumber}: {player.ProfileData.profileName}) Character";
 
-        spriteRenderer.color = player.ProfileData.profileColor;
+        robesSpriteRend.color = player.ProfileData.robesColor;
 
         isInitialized = true;
+    }
+
+    private void setSpritesFlipX(bool on)
+    {
+        blushSpriteRend.flipX = on;
+        faceSpriteRend.flipX = on;
+        feetSpriteRend.flipX = on;
+        goggleFrameSpriteRend.flipX = on;
+        goggleLensSpriteRend.flipX = on;
+        handsSpriteRend.flipX = on;
+        robesSpriteRend.flipX = on;
     }
 }

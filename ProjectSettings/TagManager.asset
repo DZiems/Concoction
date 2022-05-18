@@ -47,8 +47,17 @@ TagManager:
   - name: Props and Interactables
     uniqueID: 3736587381
     locked: 0
+  - name: Enemy
+    uniqueID: 2259369805
+    locked: 0
+  - name: EnemyHUD
+    uniqueID: 710054077
+    locked: 0
   - name: Player
     uniqueID: 2872658681
+    locked: 0
+  - name: PlayerHUD
+    uniqueID: 507831791
     locked: 0
   - name: Aim Reticle
     uniqueID: 2119475981
