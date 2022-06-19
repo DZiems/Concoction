@@ -12,21 +12,21 @@ public class MainMenuPressAnyPrompt : MonoBehaviour
         if (PlayerManager.Instance != null)
         {
             subscribeInStart = false;
-            PlayerManager.Instance.onPlayerOneJoined += Disappear;
+            PlayerManager.Instance.onPlayerJoined += Disappear;
         }
     }
     private void Start()
     {
         if (subscribeInStart)
         {
-            PlayerManager.Instance.onPlayerOneJoined += Disappear;
+            PlayerManager.Instance.onPlayerJoined += Disappear;
             subscribeInStart = false;
         }
     }
 
     private void OnDisable()
     {
-        PlayerManager.Instance.onPlayerOneJoined -= Disappear;
+        PlayerManager.Instance.onPlayerJoined -= Disappear;
     }
 
     private void Disappear()

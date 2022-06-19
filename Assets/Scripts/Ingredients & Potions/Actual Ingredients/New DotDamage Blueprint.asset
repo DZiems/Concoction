@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c897a98a7fc783447bc66e3be010a6af, type: 3}
+  m_Name: New DotDamage Blueprint
+  m_EditorClassIdentifier: 
+  flatDamageConvertedToDotMin:
+    physical: 20
+    magical: 10
+    trueDmg: 0
+  flatDamageConvertedToDotMax:
+    physical: 30
+    magical: 20
+    trueDmg: 0
+  durationMin: 4
+  durationMax: 10
+  tickTimeMin: 0.5
+  tickTimeMax: 1.5

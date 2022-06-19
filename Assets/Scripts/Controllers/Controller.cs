@@ -10,18 +10,49 @@ public class Controller : MonoBehaviour
     public bool IsAssigned { get; set; }
 
     //Inputs
-    public bool InteractDown { get; private set; }
-    public bool Slot0Down { get; private set; }
-    public bool Slot1Down { get; private set; }
-    public bool Slot2Down { get; private set; }
-    public bool RollDown { get; private set; }
-    public bool SpecialDown { get; private set; }
-    public bool StartDown { get; private set; }
+    /// <summary>  Default (A) </summary>
+    public bool InteractPress { get; private set; }
+
+    /// <summary>  Default (B) </summary>
+    public bool Slot0Press { get; private set; }
+
+    /// <summary>  Default (X) </summary>
+    public bool Slot1Press { get; private set; }
+
+    /// <summary>  Default (Y) </summary>
+    public bool Slot2Press { get; private set; }
+
+    /// <summary>  Default (RB) </summary>
+    public bool RollPress { get; private set; }
+
+    /// <summary>  Default (LB) </summary>
+    public bool SpecialPress { get; private set; }
+
+    /// <summary>  (start) </summary>
+    public bool StartPress { get; private set; }
+
+    /// <summary>  (left stick x-axis) </summary>
     public float Horizontal { get; private set; }
-    public float HorizontalDown { get; private set; }
+
+    /// <summary>  (left stick x-axis, first rightward press) </summary>
+    public bool HorizontalRightPress { get; private set; }
+
+    /// <summary>  (left stick x-axis, first leftward press) </summary>
+    public bool HorizontalLeftPress { get; private set; }
+
+    /// <summary>  (left stick y-axis) </summary>
     public float Vertical { get; private set; }
-    public float VerticalDown { get; private set; }
+
+    /// <summary>  (left stick y-axis, first upward press) </summary>
+    public bool VerticalUpPress { get; private set; }
+
+    /// <summary>  (left stick y-axis, first downward press) </summary>
+    public bool VerticalDownPress { get; private set; }
+
+    /// <summary>  (right stick x-axis) </summary>
     public float AimHorizontal { get; private set; }
+
+    /// <summary>  (right stick y-axis) </summary>
     public float AimVertical { get; private set; }
 
     private string interactID;      //a
@@ -36,31 +67,34 @@ public class Controller : MonoBehaviour
     private string aimHorizontalID; //r stick
     private string aimVerticalID;   //r stick
 
-    private bool horizontalDownFlag;
-    private bool verticalDownFlag;
-    private float axisDownAmount = 0.5f;
+    private bool isHorizontalPressPossible;
+    private bool isVerticalPressPossible;
+    private float axisPressAmount = 0.5f;
 
     private void Awake()
     {
         IsAssigned = false;
+        isHorizontalPressPossible = true;
+        isVerticalPressPossible = true;
     }
 
     // Update is called once per frame
     void Update()
     {
-        InteractDown = Input.GetButtonDown(interactID);
-        Slot0Down = Input.GetButtonDown(slot0ID);
-        Slot1Down = Input.GetButtonDown(slot1ID);
-        Slot2Down = Input.GetButtonDown(slot2ID);
+        InteractPress = Input.GetButtonDown(interactID);
+        Slot0Press = Input.GetButtonDown(slot0ID);
+        Slot1Press = Input.GetButtonDown(slot1ID);
+        Slot2Press = Input.GetButtonDown(slot2ID);
 
-        RollDown = Input.GetButtonDown(rollID);
-        SpecialDown = Input.GetButtonDown(specialID);
-        StartDown = Input.GetButtonDown(startID);
+        RollPress = Input.GetButtonDown(rollID);
+        SpecialPress = Input.GetButtonDown(specialID);
+        StartPress = Input.GetButtonDown(startID);
 
         Horizontal = Input.GetAxis(horizontalID);
-        HorizontalDown = DetermineHorizontalDown();
+        DetermineHorizontalPress();
+
         Vertical = Input.GetAxis(verticalID);
-        VerticalDown = DetermineVerticalDown();
+        DetermineVerticalPress();
 
         AimHorizontal = Input.GetAxis(aimHorizontalID);
         AimVertical = Input.GetAxis(aimVerticalID);
@@ -71,53 +105,55 @@ public class Controller : MonoBehaviour
     private void DebugButtons(bool on)
     {
         if (!on) return;
-        if (InteractDown)
+        if (InteractPress)
             Debug.Log("Interact (A)");
-        if (Slot0Down)
+        if (Slot0Press)
             Debug.Log("Slot 0 (B)");
-        if (Slot1Down)
+        if (Slot1Press)
             Debug.Log("Slot 1 (X)");
-        if (Slot2Down)
+        if (Slot2Press)
             Debug.Log("Slot 2 (Y)");
-        if (RollDown)
+        if (RollPress)
             Debug.Log("Roll (RB)");
-        if (SpecialDown)
+        if (SpecialPress)
             Debug.Log("Special (LB)");
-        if (StartDown)
+        if (StartPress)
             Debug.Log("Start (start)");
     }
 
-    private float DetermineHorizontalDown()
+    private void DetermineHorizontalPress()
     {
         //if flag is down and there's activity
-        if (!horizontalDownFlag && 
-            (Horizontal > axisDownAmount || Horizontal < -axisDownAmount))
+        if (isHorizontalPressPossible)
         {
-            horizontalDownFlag = true;
-            return Horizontal;
+            HorizontalRightPress = Horizontal >= axisPressAmount;
+            HorizontalLeftPress = Horizontal <= -axisPressAmount;
+            
+            isHorizontalPressPossible = !(HorizontalRightPress || HorizontalLeftPress);
         }
         else
         {
-            if (Horizontal == 0)
-                horizontalDownFlag = false;
-            return 0f;
+            isHorizontalPressPossible = Mathf.Abs(Horizontal) < axisPressAmount;
+            HorizontalLeftPress = false;
+            HorizontalRightPress = false;
         }
     }
 
-    private float DetermineVerticalDown()
+    private void DetermineVerticalPress()
     {
         //if flag is down and there's activity
-        if (!verticalDownFlag && 
-            (Vertical > axisDownAmount || Vertical < -axisDownAmount))
+        if (isVerticalPressPossible)
         {
-            verticalDownFlag = true;
-            return Vertical;
+            VerticalUpPress = Vertical >= axisPressAmount;
+            VerticalDownPress = Vertical <= -axisPressAmount;
+
+            isVerticalPressPossible = !(VerticalUpPress || VerticalDownPress);
         }
         else
         {
-            if (Vertical == 0)
-                verticalDownFlag = false;
-            return 0f;
+            isVerticalPressPossible = Mathf.Abs(Vertical) < axisPressAmount;
+            VerticalUpPress = false;
+            VerticalDownPress = false;
         }
     }
 
@@ -152,14 +188,18 @@ public class Controller : MonoBehaviour
     //TODO: expand this out for more cases
     public bool AnyButtonDown()
     {
-        return InteractDown || 
-            Slot0Down || 
-            Slot1Down || 
-            Slot2Down ||
-            SpecialDown || 
-            RollDown || 
-            StartDown ||
-            (HorizontalDown != 0) || (VerticalDown != 0);
+        return 
+            InteractPress ||
+            Slot0Press ||
+            Slot1Press ||
+            Slot2Press ||
+            SpecialPress ||
+            RollPress ||
+            StartPress ||
+            HorizontalLeftPress ||
+            HorizontalRightPress ||
+            VerticalUpPress ||
+            VerticalDownPress;
     }
 
 }

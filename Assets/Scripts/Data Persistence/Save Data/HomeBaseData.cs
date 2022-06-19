@@ -30,7 +30,7 @@ public class HomeBaseData
         foreach (var station in homeBase.Stations)
             stationData[i++] = 
                 new StationData(
-                    station.GetComponentInChildren<SpriteRenderer>().sprite.name, 
+                    station.Type, 
                     station.Level, 
                     station.IsUnlocked, 
                     station.IsPlaced, 
@@ -56,9 +56,9 @@ public class HomeBaseData
     {
         stationData = new StationData[3]
         {
-            new StationData("HomeBase_AlchemyTable", 1, true, false, new Tuple<int, int>(9, 6), TileRotateTool.RightRot),
-            new StationData("HomeBase_Chest", 1, true, false, new Tuple<int, int>(0, 5), TileRotateTool.TopRot),
-            new StationData("HomeBase_Door", 1, true, false, new Tuple<int, int>(0, 1), TileRotateTool.LeftRot),
+            new StationData(StationType.AlchemyTable, 1, true, false, new Tuple<int, int>(9, 6), TileRotateTool.RightRot),
+            new StationData(StationType.Chest, 1, true, false, new Tuple<int, int>(0, 5), TileRotateTool.TopRot),
+            new StationData(StationType.Door, 1, true, false, new Tuple<int, int>(0, 1), TileRotateTool.LeftRot),
         };
         return stationData;
     }

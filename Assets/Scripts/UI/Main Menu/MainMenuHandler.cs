@@ -57,17 +57,17 @@ public class MainMenuHandler : MonoBehaviour
 
     private void Start()
     {
-        PlayerManager.Instance.onPlayerOneJoined += Initialize;
+        PlayerManager.Instance.onPlayerJoined += Initialize;
     }
 
     private void OnDisable()
     {
-        PlayerManager.Instance.onPlayerOneJoined -= Initialize;
+        PlayerManager.Instance.onPlayerJoined -= Initialize;
     }
 
     private void Initialize()
     {
-        this.player = PlayerManager.Instance.PlayerOne;
+        player = PlayerManager.Instance.Player;
 
         ActivateButtons();
 
@@ -114,7 +114,7 @@ public class MainMenuHandler : MonoBehaviour
 
     private void HandleMove()
     {
-        if (player.Controller.VerticalDown > 0)
+        if (player.Controller.VerticalUpPress)
         {
             HoverButton(buttonsInd, false);
 
@@ -124,7 +124,7 @@ public class MainMenuHandler : MonoBehaviour
 
             HoverButton(buttonsInd, true);
         }
-        else if (player.Controller.VerticalDown < 0)
+        else if (player.Controller.VerticalDownPress)
         {
             HoverButton(buttonsInd, false);
 
@@ -138,12 +138,12 @@ public class MainMenuHandler : MonoBehaviour
 
     private void HandleSelectButton()
     {
-        if (player.Controller.InteractDown)
+        if (player.Controller.InteractPress)
         {
             switch (buttons[buttonsInd].Id)
             {
                 case Option.Play:
-                    GameManager.Instance.RunLoadSceneAsync(GameManager.SceneProfileSelectMenu);
+                    GameManager.Instance.RunLoadSceneAsync(GameManager.SceneProfileMenu);
                     DeactivateButtons();
                     break;
                 case Option.Settings:

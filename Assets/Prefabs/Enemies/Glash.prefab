@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 1088686048513371580}
   - component: {fileID: 1088686048513371579}
   - component: {fileID: 1088686048513371578}
-  - component: {fileID: 6967799412419445997}
   - component: {fileID: 1088686048513371577}
   - component: {fileID: 2164667996080660577}
   m_Layer: 0
@@ -101,33 +100,40 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13694e3347a58c04b89819211e16400b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  healthData:
+    maxHealth: 100
+    baseShield:
+      amount: 0
+      defense: 0
+      resistance: 0
+    baseDefense: 20
+    baseResistance: 20
+  baseMoveSpeed: 2
+  basePhysicalDmg: 30
+  baseMagicalDmg: 10
+  baseCooldownModifier: 1
+  CurrentMoveSpeed: 0
+  CurrentDamage:
+    physical: 0
+    magical: 0
+    trueDmg: 0
+  CurrentCooldownModifier: 0
+  PercentStatusImmunity: 0
+  PhysicalThornsMultiplier: 0
+  MagicalThornsMultiplier: 0
+  TrueDmgThornsMultiplier: 0
   aggroRange: 8
-  aggroDuration: 7
-  moveSpeed: 2
-  attackDamage: 30
-  contactDamage: 15
-  attackRange: 5
-  attackCooldown: 5
-  dashSpeed: 10
-  strikeRadius: 1
-  restAfterAttackDuration: 2
-  strikeZonePrefab: {fileID: 7173934239253714978, guid: efb72b06229cd664181cab0cbea6b4ef, type: 3}
---- !u!114 &6967799412419445997
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1088686048513371576}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5bbddd4fafcfeec4495cdef49ceec0ec, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  UIHealthBar: {fileID: 6018856913722243236}
-  numHitsToCombo: 3
-  maxHealth: 100
-  defaultShielding: 0
+  deAggroRange: 10
+  contactDamageMultiplier: 0.5
+  timeBetweenContactDamage: 1
+  wanderTimeMin: 3
+  wanderTimeMax: 5
+  idleTimeMin: 2
+  idleTimeMax: 4
+  attacks:
+  - {fileID: 11400000, guid: 2b96e1ddef986a34e8a192e054564c67, type: 2}
+  strikeZonePrefab: {fileID: 3427482316151645007, guid: efb72b06229cd664181cab0cbea6b4ef, type: 3}
+  dashBaseSpeedMultiplier: 4
 --- !u!95 &1088686048513371577
 Animator:
   serializedVersion: 4
@@ -259,19 +265,12 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3808280064637557266, guid: c52b22946e662114a8ac2a6317eb8c7f, type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c52b22946e662114a8ac2a6317eb8c7f, type: 3}
---- !u!114 &6018856913722243236 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 789696093823596562, guid: c52b22946e662114a8ac2a6317eb8c7f, type: 3}
-  m_PrefabInstance: {fileID: 6445449383487930550}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 981537ae3a1bb5943b94d02548d3812d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!224 &7902529380661025446 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3808280064637557264, guid: c52b22946e662114a8ac2a6317eb8c7f, type: 3}

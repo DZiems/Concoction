@@ -82,6 +82,30 @@ public class DataPersistenceManager : MonoBehaviour
         fileDataHandler.Save(gameData);
     }
 
+    public void AddNewPlayerProfile(string profileToAdd)
+    {
+        Debug.Log($"Adding profile: {profileToAdd}");
+        gameData.allPlayerProfileDatas.Add(
+               profileToAdd,
+               new PlayerProfileData(profileToAdd));
+
+        PlayerManager.Instance.LoadData(gameData);
+    }
+
+    public void DeletePlayerProfile(string profileToDelete)
+    {
+        if (gameData.allPlayerProfileDatas.ContainsKey(profileToDelete))
+        {
+            Debug.Log($"DataPersistenceManager -- Deleting Profile: {profileToDelete}");
+            gameData.allPlayerProfileDatas.Remove(profileToDelete);
+        }
+        else
+            Debug.LogError($"Attempted to remove nonexistent profile {profileToDelete}");
+
+
+        PlayerManager.Instance.LoadData(gameData);
+    }
+
 
     private void OnApplicationQuit()
     {

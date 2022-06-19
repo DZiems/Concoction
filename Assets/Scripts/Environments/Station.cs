@@ -7,12 +7,13 @@ using UnityEngine;
 
 public class Station : MonoBehaviour
 {
+    [SerializeField] private StationType type;
     [SerializeField] private int tiledWidth = 1;
     [SerializeField] private int tiledHeight = 1;
 
  
     //TODO: could turn into a queue where startIndex + count % capacity determines loop; helps with garbage collection
-    private List<Character> charactersInsideUseSpace;
+    private List<PlayerCharacter> charactersInsideUseSpace;
     private SpriteRenderer spriteRenderer;
 
     public int Level { get; private set; }
@@ -20,18 +21,19 @@ public class Station : MonoBehaviour
     public bool IsPlaced { get; private set; }
     public int TiledWidth => tiledWidth;
     public int TiledHeight => tiledHeight;
+    public StationType Type => type;
     public SpriteRenderer SpriteRenderer => spriteRenderer;
 
     private void Awake()
     {
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-        charactersInsideUseSpace = new List<Character>();
+        charactersInsideUseSpace = new List<PlayerCharacter>();
         charactersInsideUseSpace.Capacity = 4;  //TODO: replace with TOTAL_NUM_PLAYERS
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        var character = collision.GetComponent<Character>();
+        var character = collision.GetComponent<PlayerCharacter>();
         if (character != null)
         {
             if (charactersInsideUseSpace.Count == 0)
@@ -44,7 +46,7 @@ public class Station : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        var character = collision.GetComponent<Character>();
+        var character = collision.GetComponent<PlayerCharacter>();
         if (character != null)
         {
             charactersInsideUseSpace.Remove(character);
@@ -63,7 +65,7 @@ public class Station : MonoBehaviour
         {
             foreach (var character in charactersInsideUseSpace)
             {
-                if (character.Controller.InteractDown)
+                if (character.Controller.InteractPress)
                 {
                     Debug.Log("Using");
                 }

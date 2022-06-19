@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa2dea8152e483a49822e5d3a95dfa33, type: 3}
+  m_Name: New Shield Blueprint
+  m_EditorClassIdentifier: 
+  shieldMin:
+    amount: 30
+    defense: 20
+    resistance: 20
+  shieldMax:
+    amount: 40
+    defense: 25
+    resistance: 25
+  durationMin: 10
+  durationMax: 20

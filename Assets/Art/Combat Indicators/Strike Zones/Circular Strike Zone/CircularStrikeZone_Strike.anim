@@ -246,7 +246,7 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_Events:
   - time: 1
-    functionName: OnAnimFinishHide
+    functionName: HideOnAnimFinish
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

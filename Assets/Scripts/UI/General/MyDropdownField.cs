@@ -7,6 +7,9 @@ using UnityEngine.UI;
 public class MyDropdownField : MonoBehaviour
 {
     [SerializeField] private GameObject deletionField;
+
+    public float Height { get; private set; }
+
     public TextMeshProUGUI ProfileTxt { get; private set; }
     public Image BackgroundImg { get; private set; }
     public Animator Anim { get; private set; }
@@ -15,6 +18,9 @@ public class MyDropdownField : MonoBehaviour
 
     private void Awake()
     {
+        Height = GetComponent<RectTransform>().rect.height;
+
+
         ProfileTxt = GetComponentInChildren<TextMeshProUGUI>();
         BackgroundImg = GetComponent<Image>();
         Anim = GetComponent<Animator>();

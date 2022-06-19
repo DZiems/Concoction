@@ -5,28 +5,21 @@ using UnityEngine;
 [System.Serializable]
 public class GameData
 {
-    public HomeBaseData HomeBaseData;
-    public SerializableDictionary<string, PlayerCharacterData> AllPlayerCharacterData;
-    public string MostRecentScene;
+    public SerializableDictionary<string, PlayerProfileData> allPlayerProfileDatas;
 
     //default values the game starts with when there's no data
+    //TODO: put homebasedata and mostrecentscene within playerprofiledata
+    //TODO: build out inventory data.
+    //TODO: build out character data as what playerprofiledata currently is.
     public GameData()
     {
-        HomeBaseData = new HomeBaseData();
-        AllPlayerCharacterData = new SerializableDictionary<string, PlayerCharacterData>();
-        MostRecentScene = GameManager.SceneHomeBase;
+        allPlayerProfileDatas = new SerializableDictionary<string, PlayerProfileData>();
     }
 
-    public GameData(string lastLoadedScene, HomeBaseData homeBaseData, SerializableDictionary<string, PlayerCharacterData> allPlayerData)
+    public GameData(SerializableDictionary<string, PlayerProfileData> allPlayerCharacterData)
     {
-        this.HomeBaseData = homeBaseData;
-        this.MostRecentScene = lastLoadedScene;
-        this.AllPlayerCharacterData = allPlayerData;
+        this.allPlayerProfileDatas = allPlayerCharacterData;
     }
 
-
-    public override string ToString()
-    {
-        return $"{HomeBaseData}\n";
-    }
+    public PlayerProfileData CurrentPlayerProfileData => allPlayerProfileDatas[PlayerManager.Instance.Player.profileData.profileName];
 }

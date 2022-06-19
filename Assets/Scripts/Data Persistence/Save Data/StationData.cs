@@ -10,7 +10,7 @@ using UnityEngine;
 [System.Serializable]
 public class StationData
 {
-    public string id;
+    public StationType id;
     public int level;
     public bool isUnlocked;
     public bool isPlaced;
@@ -18,7 +18,7 @@ public class StationData
     public float[] rotationEulers;
 
 
-    public StationData(string id, int level, bool isUnlocked, bool isPlaced, Tuple<int, int> tiledPosition, Vector3 rotationEulers)
+    public StationData(StationType id, int level, bool isUnlocked, bool isPlaced, Tuple<int, int> tiledPosition, Vector3 rotationEulers)
     {
         this.id = id;
         this.level = level;

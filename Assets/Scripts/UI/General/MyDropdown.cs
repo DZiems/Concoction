@@ -11,10 +11,16 @@ public class MyDropdown : MonoBehaviour
 
     [Header("Prefabs")]
     [SerializeField] private MyDropdownField dropdownFieldPrefab;
+
     [Header("Customization")]
-    [SerializeField] string itemName;
+    [SerializeField] string newPrompt;
     [SerializeField] string choosePrompt; 
 
+    public enum SelectResult
+    {
+        Item,
+        CreateNew
+    }
 
     //main data
     public List<string> Items { get; private set; }
@@ -23,24 +29,21 @@ public class MyDropdown : MonoBehaviour
     private const int defaultNoSelectionInd = -1;
     private const int deleteNumRequired = 5;
     private readonly string[] deleteTxt = new string[5] { "x1", "x2", "x3", "x4", "x5" };
-    private int deletePressCountdown = deleteNumRequired;
+    private int deleteCounter = deleteNumRequired;
 
     //tools & events
-    public string CurrentItem => Items[Index];
-    private List<string> DefaultEmpty => new List<string>() { $"New {itemName}" };
-    private string DefaultCreateNew => $"New {itemName}";
+    private string CurrentItem => Items[Index];
+    public string SelectedItem => SelectedIndex != defaultNoSelectionInd ? Items[SelectedIndex] : null;
+
+    private List<string> DefaultEmpty => new List<string>() { newPrompt };
     public bool IsHoveringSelected => Index == SelectedIndex;
     public int CreateNewInd => Items.Count - 1;
-    public event Action onSelectCreateNew;
-    public event Action onSelectionMade;
-    public event Action<string> onDeletionMade;
+
 
     //dropdown references
     private MyDropdownRegion dropdownRegion;
     private CanvasGroup regionCanvasGroup;
     private Canvas regionCanvas;
-    private Rect dropdownRegionRect;
-    private float dropdownFieldHeight;
 
     //label reference
     private TextMeshProUGUI label;
@@ -48,12 +51,6 @@ public class MyDropdown : MonoBehaviour
 
     private void Awake()
     {
-        Index = 0;
-        Items = DefaultEmpty;
-        deletePressCountdown = deleteNumRequired;
-        if (string.IsNullOrEmpty(choosePrompt))
-            choosePrompt = $"Choose {itemName}";
-
         label = GetComponentInChildren<TextMeshProUGUI>();
 
         //dropdown child references
@@ -61,16 +58,21 @@ public class MyDropdown : MonoBehaviour
         regionCanvasGroup = dropdownRegion.GetComponentInChildren<CanvasGroup>();
         regionCanvas = dropdownRegion.GetComponentInChildren<Canvas>();
 
+        Index = 0;
+        Items = DefaultEmpty;
+        deleteCounter = deleteNumRequired;
+
         //set select index to -1 (defaultUnselectedInd) and make label prompt
-        ResetToUnselected();
+        GoUnselected();
         Hide();
     }
 
-    private void Start()
+
+    public void Initialize(List<string> items)
     {
-        //dimensions for a dropdown field
-        dropdownRegionRect = dropdownRegion.GetComponent<RectTransform>().rect;
-        dropdownFieldHeight = dropdownFieldPrefab.GetComponent<RectTransform>().rect.height;
+        this.Items = items;
+        items.Add(newPrompt);
+        BuildDropdown();
     }
 
     public void Show()
@@ -79,7 +81,7 @@ public class MyDropdown : MonoBehaviour
         regionCanvasGroup.alpha = 1.0f;
         regionCanvasGroup.blocksRaycasts = true;
 
-        ResetDeleteCountdown();
+        ResetDeleteCounter();
         HoverIndexedField(true);
     }
 
@@ -94,25 +96,24 @@ public class MyDropdown : MonoBehaviour
     //handle dropdown region
     private void BuildDropdown()
     {
-        Debug.Log($"Dropdown Items Count: {Items.Count}");
         dropdownRegion.Clear();
 
-        int i = 0;
+        int ind = 0;
         foreach (string item in Items)
         {
-            InstantiateField(i, item);
+            BuildField(ind, item);
 
-            if (i == SelectedIndex)
+            if (ind == SelectedIndex)
                 label.SetText(item);
 
-            i++; 
+            ind++; 
         }
         if (SelectedIndex == defaultNoSelectionInd)
             label.SetText(choosePrompt);
     }
 
 
-    private void InstantiateField(int ind, string item)
+    private void BuildField(int ind, string item)
     {
         var field = Instantiate(dropdownFieldPrefab, regionCanvas.transform);
         dropdownRegion.fields.Add(field);
@@ -123,9 +124,11 @@ public class MyDropdown : MonoBehaviour
     {
         yield return null;
 
+
         var fieldRectTransform = field.GetComponent<RectTransform>();
-        fieldRectTransform.sizeDelta = new Vector2(dropdownRegionRect.width, dropdownFieldHeight);
-        fieldRectTransform.anchoredPosition = new Vector2(0, -dropdownFieldHeight * (float)ind);
+        fieldRectTransform.sizeDelta = new Vector2(dropdownRegion.Width, field.Height);
+        fieldRectTransform.anchoredPosition = new Vector2(0, -field.Height * ind);
+
 
         field.ProfileTxt.SetText(item);
 
@@ -175,123 +178,80 @@ public class MyDropdown : MonoBehaviour
         BuildDropdown();
     }
 
-    public void AddItems(List<string> items)
+
+
+    private void DeleteCurrentItem()
     {
-        int oldCreateNewInd = CreateNewInd;
-        this.Items.AddRange(items);
-
-        //swap CreateNew field with newest added.
-        string temp = items[oldCreateNewInd];
-        items[oldCreateNewInd] = items[CreateNewInd];
-        items[CreateNewInd] = temp;
-
-        BuildDropdown();
-    }
-
-    public void SetItems(List<string> items)
-    {
-        this.Items = items;
-        items.Add(DefaultCreateNew);
-        BuildDropdown();
-    }
-
-    //don't allow removal of CreateNew field
-    public void ClearItems()
-    {
-        Items = DefaultEmpty;
-        BuildDropdown();
-    }
-
-    //don't allow removal of CreateNew field
-    public void RemoveCurrentItem()
-    {
-        if (Index == CreateNewInd)
-        {
-            Debug.Log($"Index was at 'New Profile' field, so, not deleting");
-            return;
-        }
-        if (onDeletionMade == null)
-        {
-            Debug.LogWarning("Dropdown 'onDeletionMade' method is null, which means the player can never delete an item.");
-            return;
-        }
-        Debug.Log($"Inside Remove Item, removing {CurrentItem}");
-
-        onDeletionMade(CurrentItem);
+        if (SelectedIndex == Index)
+            GoUnselected();
+        else if (SelectedIndex > Index)
+            SelectedIndex--;
 
         Items.RemoveAt(Index);
-
-        if (SelectedIndex == Index)
-            ResetToUnselected();
-        else
-            SelectedIndex--;
 
         Index = 0;
 
         BuildDropdown();
     }
-
-    private void ResetToUnselected()
+    private void GoUnselected()
     {
         SelectedIndex = defaultNoSelectionInd;
         label.SetText(choosePrompt);
     }
 
-    public void DecrementItemDelete()
+    //don't allow removal of CreateNew field
+    public string TryDelete()
     {
-        if (Index == CreateNewInd) return;
+        if (Index == CreateNewInd) 
+            return null;
 
-        deletePressCountdown--;
-        Debug.Log($"DeletePressCount {deletePressCountdown} for item {CurrentItem} at index {Index}");
-        if (deletePressCountdown <= 0)
+        deleteCounter--;
+        if (deleteCounter <= 0)
         {
-            RemoveCurrentItem();
-            deletePressCountdown = deleteNumRequired;
+            string itemToDelete = CurrentItem;
+            DeleteCurrentItem();
+            deleteCounter = deleteNumRequired;
+            return itemToDelete;
         }
         else
         {
             var field = dropdownRegion.fields[Index];
-            StartCoroutine(FlashDeleteRegion(field));
-            field.DeletePressedText.SetText(deleteTxt[deletePressCountdown - 1]);
+            StartCoroutine(FlashDelete(field));
+            field.DeletePressedText.SetText(deleteTxt[deleteCounter - 1]);
+            return null;
         }
     }
-    private IEnumerator FlashDeleteRegion(MyDropdownField field)
+    private IEnumerator FlashDelete(MyDropdownField field)
     {
         field.DeletionField.transform.localScale *= 1.2f;
         yield return new WaitForSeconds(0.1f);
         field.DeletionField.transform.localScale = Vector3.one;
 
     }
-
-    private void ResetDeleteCountdown()
+    private void ResetDeleteCounter()
     {
         if (Index == CreateNewInd) return;
 
-        if (deletePressCountdown != deleteNumRequired)
+        if (deleteCounter != deleteNumRequired)
         {
-            deletePressCountdown = deleteNumRequired;
+            deleteCounter = deleteNumRequired;
             dropdownRegion.fields[Index].
-                DeletePressedText.SetText(deleteTxt[deletePressCountdown - 1]);
+                DeletePressedText.SetText(deleteTxt[deleteCounter - 1]);
         }
     }
 
-    public void SelectCurrentItem()
+
+
+    public SelectResult Select()
     {
         if (Index != CreateNewInd)
         {
             UpdateSelection();
-
-            if (onSelectionMade != null)
-                onSelectionMade();
-            else
-                Debug.LogWarning("Dropdown 'onSelectionMade' method is null, which means the player can never select an item.");
+            return SelectResult.Item;
         }
         else
         {
-            if (onSelectCreateNew != null)
-                onSelectCreateNew();
-            else
-                Debug.LogWarning("Dropdown 'onSelectCreateNew' method is null, which means the player can never create a new field.");
+            return SelectResult.CreateNew;
         }
 
     }
@@ -301,7 +261,7 @@ public class MyDropdown : MonoBehaviour
         label.SetText(Items[Index]);
 
         //if selecting something new, reset old selection's color
-        if (SelectedIndex != Index && !(SelectedIndex < 0))
+        if (SelectedIndex != Index && SelectedIndex != defaultNoSelectionInd)
         {
             Debug.Log($"Selected index on UpdateSelection(): {SelectedIndex}");
             var oldSelectedField = dropdownRegion.fields[SelectedIndex];
@@ -314,11 +274,11 @@ public class MyDropdown : MonoBehaviour
     }
 
     //items are built top to bottom, so moving "down" increments downward
-    public void MoveDown()
+    public void ScrollDown()
     {
         if (Items.Count <= 0) return;
 
-        ResetDeleteCountdown();
+        ResetDeleteCounter();
 
         HoverIndexedField(false);
         if (Index >= Items.Count - 1)
@@ -330,11 +290,11 @@ public class MyDropdown : MonoBehaviour
 
     }
 
-    public void MoveUp()
+    public void ScrollUp()
     {
         if (Items.Count <= 0) return;
 
-        ResetDeleteCountdown();
+        ResetDeleteCounter();
 
         HoverIndexedField(false);
 

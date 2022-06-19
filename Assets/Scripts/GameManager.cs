@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
     public static GameManager Instance { get; private set; }
 
     public const string SceneMainMenu = "MainMenu";
-    public const string SceneProfileSelectMenu = "ProfileSelectMenu";
+    public const string SceneProfileMenu = "ProfileMenu";
     public const string SceneHomeBase = "HomeBase";
     public const string SceneAdventure = "Adventure";
     public string CurrentScene { get; private set; }
@@ -26,10 +26,24 @@ public class GameManager : MonoBehaviour, IDataPersistence
         }
         Instance = this;
 
-        CurrentScene = SceneMainMenu;
+        CurrentScene = SceneManager.GetActiveScene().name;
         DontDestroyOnLoad(gameObject);
     }
 
+    public void LoadData(GameData data)
+    {
+        if (this == null) return;
+
+    }
+
+    public void SaveData(GameData data)
+    {
+        if (this == null) return;
+
+        if (IsCurrentSceneAMenu()) return;
+
+        data.CurrentPlayerProfileData.mostRecentScene = CurrentScene;
+    }
 
     private void OnEnable()
     {
@@ -45,58 +59,36 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     private void Start()
     {
-        Debug.Log($"Scene name: {SceneManager.GetActiveScene().name}");
         switch (SceneManager.GetActiveScene().name)
         {
             case SceneHomeBase:
             case SceneAdventure:
-                RegisterForPlayerJoins_SpawnPlayer();
+                RegisterForPlayerJoin_SpawnPlayer();
                 break;
             default:
                 break;
         }
     }
 
-    private void RegisterForPlayerJoins_SpawnPlayer()
+    private void RegisterForPlayerJoin_SpawnPlayer()
     {
         Debug.Log("Note: Registering for Player Join events from GameManager. This means game was started from somewhere other than main menu.");
-        PlayerManager.Instance.onPlayerOneJoined += () =>
+        PlayerManager.Instance.onPlayerJoined += () =>
         {
-            Debug.Log("onPlayerJoin was registered to by the GameManager. This will spawn a character.");
-            if (PlayerManager.Instance.PlayerOne != null)
+            var player = PlayerManager.Instance.Player;
+            if (!PlayerManager.Instance.Player.HasProfile)
             {
-                var playerOne = PlayerManager.Instance.PlayerOne;
-                if (!playerOne.HasProfile)
-                {
-                    playerOne.AssignProfile(new PlayerCharacterData());
-                }
-                playerOne.SpawnCharacter();
-            }
-        };
-        PlayerManager.Instance.onPlayerTwoToFourJoined += (Player player) =>
-        {
-            Debug.Log("onPlayerJoin was registered to by the GameManager. Spawning a character.");
-            if (!player.HasProfile)
-            {
-                player.AssignProfile(new PlayerCharacterData());
+                player.AssignProfile(new PlayerProfileData("Temporary Debug"));
             }
             player.SpawnCharacter();
         };
     }
 
-    public void LoadData(GameData data)
-    {
-        MostRecentScene = data.MostRecentScene;
-    }
-
-    public void SaveData(GameData data)
-    {
-        data.MostRecentScene = CurrentScene;
-    }
+    
 
     public void GoToMostRecentScene()
     {
-        if (IsMostRecentSceneAMenu())
+        if (string.IsNullOrEmpty(MostRecentScene))
             RunLoadSceneAsync(SceneHomeBase);
         else
             RunLoadSceneAsync(MostRecentScene);
@@ -104,7 +96,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     public void ResetGameToMainMenu()
     {
-        PlayerManager.Instance.RemoveAllPlayers();
+        PlayerManager.Instance.RemovePlayerFromGame();
         RunLoadSceneAsync(SceneMainMenu);
     }
 
@@ -119,8 +111,8 @@ public class GameManager : MonoBehaviour, IDataPersistence
         Debug.Log("OnSceneLoaded called");
         DataPersistenceManager.Instance.OnSceneLoaded();
 
-        if (ShouldSpawnPlayers())
-            PlayerManager.Instance.SpawnAllActivePlayers();
+        if (!IsCurrentSceneAMenu())
+            PlayerManager.Instance.SpawnPlayer();
     }
 
     public void OnSceneUnloaded(Scene scene)
@@ -135,13 +127,9 @@ public class GameManager : MonoBehaviour, IDataPersistence
         Application.Quit();
     }
 
-    private bool ShouldSpawnPlayers()
+    private bool IsCurrentSceneAMenu()
     {
-        return CurrentScene != SceneMainMenu && CurrentScene != SceneProfileSelectMenu;
-    }
-    private bool IsMostRecentSceneAMenu()
-    {
-        return MostRecentScene == SceneMainMenu || MostRecentScene == SceneProfileSelectMenu;
+        return CurrentScene == SceneMainMenu || CurrentScene == SceneProfileMenu;
     }
 
    

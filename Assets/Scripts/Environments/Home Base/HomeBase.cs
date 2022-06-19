@@ -10,7 +10,7 @@ public class HomeBase : Room, IDataPersistence
     [SerializeField] private Station[] stationPrefabs;
 
     public Station[] Stations { get; private set; }
-    private Dictionary<string, Station> stationsDictionary;
+    private Dictionary<StationType, Station> stationsDictionary;
 
     private bool isLoaded;
 
@@ -24,33 +24,31 @@ public class HomeBase : Room, IDataPersistence
     }
     private void InitializeDictionaries()
     {
-        stationsDictionary = new Dictionary<string, Station>();
+        stationsDictionary = new Dictionary<StationType, Station>();
         foreach (var station in stationPrefabs)
-        {
-            var stationName = station.gameObject.name;
-            if (!string.IsNullOrEmpty(stationName))
-                stationsDictionary.Add(stationName, station);
-            else
-                Debug.LogError($"HomeBase stationPrefabs has an unnamed station: {stationName}");
-        }
+            stationsDictionary.Add(station.Type, station);
     }
 
     //IDataPersistence
     public void LoadData(GameData data)
     {
-        width = data.HomeBaseData.width;
-        height = data.HomeBaseData.height;
-        cellSize = data.HomeBaseData.cellSize;
-        origin = new Vector3(data.HomeBaseData.origin[0], data.HomeBaseData.origin[1]);
+        HomeBaseData homeBaseData = data.CurrentPlayerProfileData.homeBaseData;
 
-        Build(data.HomeBaseData.stationData);
+        width = homeBaseData.width;
+        height = homeBaseData.height;
+        cellSize = homeBaseData.cellSize;
+        origin = new Vector3(homeBaseData.origin[0], homeBaseData.origin[1]);
+
+        Build(homeBaseData.stationData);
 
         isLoaded = true;
     }
 
     public void SaveData(GameData data)
     {
-        data.HomeBaseData = new HomeBaseData(this);
+        string playerProfileName = PlayerManager.Instance.Player.profileData.profileName;
+
+        data.allPlayerProfileDatas[playerProfileName].homeBaseData = new HomeBaseData(this);
     }
 
     private void Build(StationData[] stationData)
