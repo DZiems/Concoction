@@ -23,13 +23,16 @@ public class Controller : MonoBehaviour
     public bool Slot2Press { get; private set; }
 
     /// <summary>  Default (RB) </summary>
-    public bool RollPress { get; private set; }
+    public bool DashPress { get; private set; }
 
     /// <summary>  Default (LB) </summary>
     public bool SpecialPress { get; private set; }
 
     /// <summary>  (start) </summary>
     public bool StartPress { get; private set; }
+
+    /// <summary>  (back) </summary>
+    public bool BackPress { get; private set; }
 
     /// <summary>  (left stick x-axis) </summary>
     public float Horizontal { get; private set; }
@@ -55,21 +58,22 @@ public class Controller : MonoBehaviour
     /// <summary>  (right stick y-axis) </summary>
     public float AimVertical { get; private set; }
 
-    private string interactID;      //a
-    private string slot0ID;         //b
-    private string slot1ID;         //x
-    private string slot2ID;         //y
-    private string rollID;          //rb
-    private string specialID;       //lb
-    private string startID;         //start
-    private string horizontalID;    //l stick
-    private string verticalID;      //l stick
-    private string aimHorizontalID; //r stick
-    private string aimVerticalID;   //r stick
+    private const string interactID = "Interact";      //a
+    private const string slot0ID = "Slot0";         //b
+    private const string slot1ID = "Slot1";         //x
+    private const string slot2ID = "Slot2";         //y
+    private const string dashID = "Dash";          //rb
+    private const string specialID = "Special";       //lb
+    private const string startID = "Start";         //start
+    private const string backID = "Back";           //back
+    private const string horizontalID = "Horizontal";    //l stick
+    private const string verticalID = "Vertical";      //l stick
+    private const string aimHorizontalID = "AimHorizontal"; //r stick
+    private const string aimVerticalID = "AimVertical";   //r stick
 
     private bool isHorizontalPressPossible;
     private bool isVerticalPressPossible;
-    private float axisPressAmount = 0.5f;
+    private float axisPressedThreshold = 0.5f;
 
     private void Awake()
     {
@@ -86,9 +90,10 @@ public class Controller : MonoBehaviour
         Slot1Press = Input.GetButtonDown(slot1ID);
         Slot2Press = Input.GetButtonDown(slot2ID);
 
-        RollPress = Input.GetButtonDown(rollID);
+        DashPress = Input.GetButtonDown(dashID);
         SpecialPress = Input.GetButtonDown(specialID);
         StartPress = Input.GetButtonDown(startID);
+        BackPress = Input.GetButtonDown(backID);
 
         Horizontal = Input.GetAxis(horizontalID);
         DetermineHorizontalPress();
@@ -113,12 +118,23 @@ public class Controller : MonoBehaviour
             Debug.Log("Slot 1 (X)");
         if (Slot2Press)
             Debug.Log("Slot 2 (Y)");
-        if (RollPress)
+        if (DashPress)
             Debug.Log("Roll (RB)");
         if (SpecialPress)
             Debug.Log("Special (LB)");
         if (StartPress)
             Debug.Log("Start (start)");
+        if (BackPress)
+            Debug.Log("Back (back)");
+        if (HorizontalLeftPress)
+            Debug.Log("Left (LStick)");
+        if (HorizontalRightPress)
+            Debug.Log("Right (LStick)");
+        if (VerticalUpPress)
+            Debug.Log("Up (LStick)");
+        if (VerticalDownPress)
+            Debug.Log("Down (LStick)");
+
     }
 
     private void DetermineHorizontalPress()
@@ -126,14 +142,14 @@ public class Controller : MonoBehaviour
         //if flag is down and there's activity
         if (isHorizontalPressPossible)
         {
-            HorizontalRightPress = Horizontal >= axisPressAmount;
-            HorizontalLeftPress = Horizontal <= -axisPressAmount;
+            HorizontalRightPress = Horizontal >= axisPressedThreshold;
+            HorizontalLeftPress = Horizontal <= -axisPressedThreshold;
             
             isHorizontalPressPossible = !(HorizontalRightPress || HorizontalLeftPress);
         }
         else
         {
-            isHorizontalPressPossible = Mathf.Abs(Horizontal) < axisPressAmount;
+            isHorizontalPressPossible = Mathf.Abs(Horizontal) < axisPressedThreshold;
             HorizontalLeftPress = false;
             HorizontalRightPress = false;
         }
@@ -144,36 +160,19 @@ public class Controller : MonoBehaviour
         //if flag is down and there's activity
         if (isVerticalPressPossible)
         {
-            VerticalUpPress = Vertical >= axisPressAmount;
-            VerticalDownPress = Vertical <= -axisPressAmount;
+            VerticalUpPress = Vertical >= axisPressedThreshold;
+            VerticalDownPress = Vertical <= -axisPressedThreshold;
 
             isVerticalPressPossible = !(VerticalUpPress || VerticalDownPress);
         }
         else
         {
-            isVerticalPressPossible = Mathf.Abs(Vertical) < axisPressAmount;
+            isVerticalPressPossible = Mathf.Abs(Vertical) < axisPressedThreshold;
             VerticalUpPress = false;
             VerticalDownPress = false;
         }
     }
 
-    internal void SetId(int id)
-    {
-        Id = id;
-        interactID = $"P{Id}Interact";
-        slot0ID = $"P{Id}Slot0";
-        slot1ID = $"P{Id}Slot1";
-        slot2ID = $"P{Id}Slot2";
-        rollID = $"P{Id}Roll";
-        specialID = $"P{Id}Special";
-        startID = $"P{Id}Start";
-        horizontalID = $"P{Id}Horizontal";
-        verticalID = $"P{Id}Vertical";
-        aimHorizontalID = $"P{Id}AimHorizontal";
-        aimVerticalID = $"P{Id}AimVertical";
-
-        gameObject.name = $"Controller {Id}";
-    }
 
     internal Vector2 GetDirection()
     {
@@ -194,7 +193,7 @@ public class Controller : MonoBehaviour
             Slot1Press ||
             Slot2Press ||
             SpecialPress ||
-            RollPress ||
+            DashPress ||
             StartPress ||
             HorizontalLeftPress ||
             HorizontalRightPress ||

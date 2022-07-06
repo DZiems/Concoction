@@ -9,14 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 55daff53e4baa0942bab4b613d342636, type: 3}
+  m_Script: {fileID: 11500000, guid: b4b9e1139e826a840a3b13710b7370c3, type: 3}
   m_Name: New FlatDamage Blueprint
   m_EditorClassIdentifier: 
   damageMin:
     physical: 20
-    magical: 5
+    magical: 20
     trueDmg: 0
   damageMax:
-    physical: 30
-    magical: 15
+    physical: 50
+    magical: 50
     trueDmg: 0

@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-public class MyDropdown : MonoBehaviour
+public class MyDropdown : UIHoverableItem
 {
 
     [Header("Prefabs")]
@@ -49,8 +49,10 @@ public class MyDropdown : MonoBehaviour
     private TextMeshProUGUI label;
 
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         label = GetComponentInChildren<TextMeshProUGUI>();
 
         //dropdown child references
@@ -263,7 +265,6 @@ public class MyDropdown : MonoBehaviour
         //if selecting something new, reset old selection's color
         if (SelectedIndex != Index && SelectedIndex != defaultNoSelectionInd)
         {
-            Debug.Log($"Selected index on UpdateSelection(): {SelectedIndex}");
             var oldSelectedField = dropdownRegion.fields[SelectedIndex];
 
             oldSelectedField.ProfileTxt.color = ColorPallete.dropdownTextNormal;

@@ -48,7 +48,7 @@ public class HealthSystem
         if (damage is DotDamage)
         {
             Debug.Log("Health.TakeDamage() received a dotDamage");
-            GameManager.Instance.StartCoroutine(TakeDotDamage(damage as DotDamage));
+            SceneManager.Instance.StartCoroutine(TakeDotDamage(damage as DotDamage));
         }
         else
         {

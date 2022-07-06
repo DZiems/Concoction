@@ -68,7 +68,7 @@ public class InCreateProfileState : ProfileMenuState
         {
             alphabetFieldPrompt.DeleteLetter();
         }
-        else if (controller.SpecialPress || controller.RollPress)
+        else if (controller.SpecialPress || controller.DashPress)
         {
             alphabetFieldPrompt.ShiftCasing();
         }

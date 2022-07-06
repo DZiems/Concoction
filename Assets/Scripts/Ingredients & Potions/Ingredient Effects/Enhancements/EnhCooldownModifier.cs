@@ -8,12 +8,18 @@ public class EnhCooldownModifier : Enhancement
     float duration;
 
     private float amountChanged;
-    
+
+    public override EffectId Type() => EffectId.CooldownModifier;
+
+    public override SerializableDictionary<string, float> DataParameters() => 
+        new SerializableDictionary<string, float>()
+        {
+            {multiplierKey, multiplier},
+            {durationKey, duration}
+        };
+
     public EnhCooldownModifier(EnhCooldownModifierBlueprint blueprint)
     {
-        Group = EffectGroup.Enhancement;
-        Type = EffectID.Enh_CooldownModifier;
-
         multiplier = blueprint.GenerateMultiplier();
         duration = blueprint.GenerateDuration();
 
@@ -22,9 +28,6 @@ public class EnhCooldownModifier : Enhancement
 
     public EnhCooldownModifier(SerializableDictionary<string, float> parameters)
     {
-        Group = EffectGroup.Enhancement;
-        Type = EffectID.Enh_CooldownModifier;
-
         System.Diagnostics.Debug.Assert(parameters.ContainsKey(multiplierKey) && parameters.ContainsKey(durationKey));
 
         multiplier = parameters[multiplierKey];
@@ -53,18 +56,7 @@ public class EnhCooldownModifier : Enhancement
 
     public override string ToString()
     {
-        return $"{Group}: {Type}: {multiplier}x for {duration}";
-    }
-
-    public override EffectData GetData()
-    {
-        var parameters = new SerializableDictionary<string, float>() 
-        {
-            {multiplierKey, multiplier},
-            {durationKey, duration}
-        };
-
-        return new EffectData(Group, Type, parameters);
+        return $"{Type()}: {multiplier}x for {duration}";
     }
 
 }

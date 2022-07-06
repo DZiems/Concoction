@@ -4,13 +4,16 @@ using UnityEngine;
 
 public abstract class Effect
 {
-
-    public EffectGroup Group { get; protected set; }
-    public EffectID Type { get; protected set; }
-
     public abstract void RunEffect(Entity receiver, Entity dealer);
 
-    public abstract EffectData GetData();
+    public EffectData ToData()
+    {
+        return new EffectData(Type(), DataParameters());
+    }
+
+    public abstract EffectId Type();
+
+    public abstract SerializableDictionary<string, float> DataParameters();
 
 
     public static readonly string durationKey = "duration";

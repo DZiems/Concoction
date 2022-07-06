@@ -16,8 +16,6 @@ public class Player : MonoBehaviour
 
     private AimReticle aimReticle;
 
-    public event Action onHasLeftGame;
-
 
     public void AssignController(Controller controller)
     {
@@ -82,18 +80,24 @@ public class Player : MonoBehaviour
 
     }
 
+    public void SpawnCharacterForDebugging()
+    {
+        Character = Instantiate(PlayerManager.Instance.BaseCharacterPrefab);
+        Character.Initialize(this);
+
+        aimReticle = Instantiate(PlayerManager.Instance.BaseAimReticlePrefab);
+        aimReticle.Initialize(this);
+    }
+
     public void RemoveFromGame()
     {
         Debug.Log($"Player RemoveFromGame() called");
-        ControllerManager.Instance.UnassignController(Controller.Id);
+        ControllerManager.Instance.UnassignController();
 
         Controller = null;
 
         RemoveCharacter();
 
-        //todo: register to this from profile select menu
-        if (onHasLeftGame != null)
-            onHasLeftGame();
     }
 
     private void RemoveCharacter()

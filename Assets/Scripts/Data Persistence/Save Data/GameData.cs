@@ -21,5 +21,6 @@ public class GameData
         this.allPlayerProfileDatas = allPlayerCharacterData;
     }
 
-    public PlayerProfileData CurrentPlayerProfileData => allPlayerProfileDatas[PlayerManager.Instance.Player.profileData.profileName];
+    public PlayerProfileData CurrentPlayerProfileData => 
+        PlayerManager.Instance.Player.profileData != null ? (allPlayerProfileDatas[PlayerManager.Instance.Player.profileData.profileName]) : (null);
 }

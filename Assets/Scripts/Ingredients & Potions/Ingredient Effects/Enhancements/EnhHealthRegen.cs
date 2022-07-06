@@ -8,11 +8,19 @@ public class EnhHealthRegen : Enhancement
     float tickTime;
     float duration;
 
+    public override EffectId Type() => EffectId.HealthRegen;
+
+    public override SerializableDictionary<string, float> DataParameters() =>
+        new SerializableDictionary<string, float>()
+        {
+            {healAmountKey, healAmount},
+            {tickTimeKey, tickTime},
+            {durationKey, duration},
+        };
+
+
     public EnhHealthRegen(EnhHealthRegenBlueprint blueprint)
     {
-        Group = EffectGroup.Enhancement;
-        Type = EffectID.Enh_HealthRegen;
-
         healAmount = blueprint.GenerateHealAmount();
         tickTime = blueprint.GenerateHealPeriod();
         duration = blueprint.GenerateDuration();
@@ -20,9 +28,6 @@ public class EnhHealthRegen : Enhancement
 
     public EnhHealthRegen(SerializableDictionary<string, float> parameters)
     {
-        Group = EffectGroup.Enhancement;
-        Type = EffectID.Enh_HealthRegen;
-
         System.Diagnostics.Debug.Assert(parameters.ContainsKey(healAmountKey) && parameters.ContainsKey(tickTimeKey) && parameters.ContainsKey(durationKey));
 
         healAmount = parameters[healAmountKey];
@@ -54,19 +59,8 @@ public class EnhHealthRegen : Enhancement
 
     public override string ToString()
     {
-        return $"{Group}: {Type}: {healAmount} each {tickTime} for {duration}";
+        return $"{Type()}: {healAmount} each {tickTime} for {duration}";
     }
 
-    public override EffectData GetData()
-    {
-        var parameters = new SerializableDictionary<string, float>()
-        {
-            {healAmountKey, healAmount},
-            {tickTimeKey, tickTime},
-            {durationKey, duration},
-        };
-
-        return new EffectData(Group, Type, parameters);
-    }
 
 }

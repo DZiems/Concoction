@@ -1,0 +1,118 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1b83369f15734340a3602d25fb19fbd, type: 3}
+  m_Name: _
+  m_EditorClassIdentifier: 
+  id: {fileID: 11400000, guid: 9b14091282ce16644bf57213bf1bd00c, type: 2}
+  rarityRoller:
+    tierTable:
+      amountSelected: 1
+      content:
+      - value: 0
+        probability: 256
+        isEnabled: 1
+        isUnique: 1
+        isGuaranteed: 0
+      - value: 1
+        probability: 64
+        isEnabled: 1
+        isUnique: 1
+        isGuaranteed: 0
+      - value: 2
+        probability: 16
+        isEnabled: 1
+        isUnique: 1
+        isGuaranteed: 0
+      - value: 3
+        probability: 4
+        isEnabled: 1
+        isUnique: 1
+        isGuaranteed: 0
+      - value: 4
+        probability: 1
+        isEnabled: 1
+        isUnique: 1
+        isGuaranteed: 0
+  effectRoller:
+    baseTable:
+      amountSelected: 1
+      content:
+      - value: {fileID: 11400000, guid: 9f420e4266b32774a94abdf1c4ffcb15, type: 2}
+        probability: 80
+        isEnabled: 1
+        isUnique: 1
+        isGuaranteed: 0
+      - value: {fileID: 11400000, guid: 6670250eda713f544b2535e02bc04e4f, type: 2}
+        probability: 40
+        isEnabled: 1
+        isUnique: 1
+        isGuaranteed: 0
+    commonTable:
+      amountSelected: 1
+      content:
+      - value: {fileID: 0}
+        probability: 10
+        isEnabled: 1
+        isUnique: 0
+        isGuaranteed: 0
+      - value: {fileID: 11400000, guid: 533387b7afffb7844a71c49fc6d071c8, type: 2}
+        probability: 10
+        isEnabled: 1
+        isUnique: 1
+        isGuaranteed: 0
+    uncommonTable:
+      amountSelected: 1
+      content:
+      - value: {fileID: 0}
+        probability: 2
+        isEnabled: 1
+        isUnique: 0
+        isGuaranteed: 0
+      - value: {fileID: 11400000, guid: 17e5df4dfa587cd40aceaa199da9855c, type: 2}
+        probability: 8
+        isEnabled: 1
+        isUnique: 1
+        isGuaranteed: 0
+    rareTable:
+      amountSelected: 1
+      content:
+      - value: {fileID: 11400000, guid: 7380c1f5429aa0f4ea64dc23d994dd36, type: 2}
+        probability: 9
+        isEnabled: 1
+        isUnique: 1
+        isGuaranteed: 0
+      - value: {fileID: 0}
+        probability: 1
+        isEnabled: 1
+        isUnique: 0
+        isGuaranteed: 0
+    epicTable:
+      amountSelected: 2
+      content:
+      - value: {fileID: 11400000, guid: a5698a946ece2504b99427729728efc3, type: 2}
+        probability: 10
+        isEnabled: 1
+        isUnique: 1
+        isGuaranteed: 0
+      - value: {fileID: 0}
+        probability: 10
+        isEnabled: 0
+        isUnique: 0
+        isGuaranteed: 0
+    fabledTable:
+      amountSelected: 1
+      content:
+      - value: {fileID: 11400000, guid: abba9004659797c40898cc168ced01bf, type: 2}
+        probability: 10
+        isEnabled: 1
+        isUnique: 1
+        isGuaranteed: 0

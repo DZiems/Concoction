@@ -1,22 +1,21 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 
-[CreateAssetMenu(fileName = "New Ingredient Blueprint", menuName = "Ingredient Blueprint")]
+
+[CreateAssetMenu(fileName = "New IngredientBlueprint", menuName = "Ingredients/Blueprint")]
 public class IngredientBlueprint : ScriptableObject
 {
-    public string identity;
-    public Sprite artwork;
+    [Header("Id")]
+    public IngredientId id;
 
-    [Header("Power Scaling Properties")]
-    public int level = 1;
-    public RarityTier rarity;
+    [Header("Rarity Tier Chances")]
+    public RarityTierRoller rarityRoller;
 
-    [Header("Synergy Properties")]
-    public Region region;
-    public Taxonomy taxonomy;
-
-    public EnhanceEffectBlueprint[] enhanceEffectBlueprints;
-    public ImpairEffectBlueprint[] impairEffectBlueprints;
+    [Header("Effects")]
+    public EffectRoller effectRoller;
 
 }
+
+

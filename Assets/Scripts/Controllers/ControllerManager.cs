@@ -4,7 +4,8 @@ using UnityEngine;
 public class ControllerManager : MonoBehaviour
 {
     public static ControllerManager Instance { get; private set; }
-    private Controller[] controllers;
+
+    Controller controller;
 
 
     private void Awake()
@@ -18,20 +19,11 @@ public class ControllerManager : MonoBehaviour
 
         Instance = this;
 
-        controllers = GetComponentsInChildren<Controller>();
-
         DontDestroyOnLoad(gameObject);
+
+        controller = GetComponentInChildren<Controller>();
     }
 
-    private void Start()
-    {
-        var index = 1;
-        foreach (var controller in controllers)
-        {
-            controller.SetId(index);
-            index++;
-        }
-    }
 
     private void Update()
     {
@@ -40,17 +32,16 @@ public class ControllerManager : MonoBehaviour
 
     private void HandleUnassignedControllers()
     {
-        foreach (var controller in controllers)
-            if (ControllerNeedsAssign(controller))
-                AssignController(controller);
+        if (ControllerNeedsAssign())
+            AssignController();
     }
 
-    private bool ControllerNeedsAssign(Controller controller)
+    private bool ControllerNeedsAssign()
     {
         return !controller.IsAssigned && controller.AnyButtonDown();
     }
 
-    private void AssignController(Controller controller)
+    private void AssignController()
     {
         controller.IsAssigned = true;
 
@@ -59,10 +50,9 @@ public class ControllerManager : MonoBehaviour
         PlayerManager.Instance.AssignController(controller);
     }
 
-    internal void UnassignController(int id)
+    internal void UnassignController()
     {
-        int index = id - 1;
-        Debug.Log($"Unassigning Controller: {controllers[index].gameObject.name}");
-        controllers[index].IsAssigned = false;
+        Debug.Log($"Unassigning Controller.");
+        controller.IsAssigned = false;
     }
 }

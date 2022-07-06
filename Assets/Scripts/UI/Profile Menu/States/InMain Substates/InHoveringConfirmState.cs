@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class InHoveringConfirmState : InMainSubState
 {
-    public InHoveringConfirmState(ProfileMenu profileMenu, InMainState parentState, Controller controller, UIFiniteStateMachine stateMachine, Animator buttonAnim, TextMeshProUGUI buttonText) : base(profileMenu, parentState, controller, stateMachine, buttonAnim, buttonText)
+    public InHoveringConfirmState(InMainState parentState, Controller controller, UIFiniteStateMachine stateMachine, UIHoverableItem button) : base(parentState, controller, stateMachine, button)
     {
     }
 

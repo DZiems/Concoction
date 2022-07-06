@@ -13,8 +13,8 @@ public class PotionEffectTester : MonoBehaviour
     public EnhThornsBlueprint thornsBlueprint;
     public EnhImmunityBlueprint immunityBlueprint;
 
-    public DmgFlatBlueprint flatDmgBlueprint;
-    public DmgDotBlueprint dotDmgBlueprint;
+    public FlatDmgBlueprint flatDmgBlueprint;
+    public DotDmgBlueprint dotDmgBlueprint;
 
     private EnhMagicalDamage magicalDamage;
     private EnhCooldownModifier cooldownModifier;
@@ -24,8 +24,8 @@ public class PotionEffectTester : MonoBehaviour
     private EnhThorns thorns;
     private EnhImmunity immunity;
 
-    private DmgFlat flatDmg;
-    private DmgDot dotDmg;
+    private FlatDmg flatDmg;
+    private DotDmg dotDmg;
 
     private void Awake()
     {
@@ -34,7 +34,7 @@ public class PotionEffectTester : MonoBehaviour
         if (entity == null)
             Debug.LogError("entity was null!");
         else
-            Debug.Log(entity.name);
+            Debug.Log($"PotionEffectTester attached to entity: {entity.name}");
 
         magicalDamage = new EnhMagicalDamage(magicalDamageBlueprint);
         cooldownModifier = new EnhCooldownModifier(cooldownBlueprint);
@@ -44,8 +44,8 @@ public class PotionEffectTester : MonoBehaviour
         thorns = new EnhThorns(thornsBlueprint);
         immunity = new EnhImmunity(immunityBlueprint);
 
-        flatDmg = new DmgFlat(flatDmgBlueprint);
-        dotDmg = new DmgDot(dotDmgBlueprint);
+        flatDmg = new FlatDmg(flatDmgBlueprint);
+        dotDmg = new DotDmg(dotDmgBlueprint);
     }
 
 

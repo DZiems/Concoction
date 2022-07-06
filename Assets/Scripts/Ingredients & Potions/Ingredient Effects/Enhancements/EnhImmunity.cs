@@ -8,20 +8,23 @@ public class EnhImmunity : Enhancement
     float duration;
 
 
+    public override EffectId Type() => EffectId.Immunity;
+
+    public override SerializableDictionary<string, float> DataParameters() =>
+        new SerializableDictionary<string, float>()
+        {
+            {percentageKey, percentage},
+            {durationKey, duration}
+        };
+
     public EnhImmunity(EnhImmunityBlueprint blueprint)
     {
-        Group = EffectGroup.Enhancement;
-        Type = EffectID.Enh_Immunity;
-
         percentage = blueprint.GeneratePercentImmunity();
         duration = blueprint.GenerateDuration();
     }
 
     public EnhImmunity(SerializableDictionary<string, float> parameters)
     {
-        Group = EffectGroup.Enhancement;
-        Type = EffectID.Enh_Immunity;
-
         System.Diagnostics.Debug.Assert(parameters.ContainsKey(percentageKey) && parameters.ContainsKey(durationKey));
 
         percentage = parameters[percentageKey];
@@ -44,18 +47,8 @@ public class EnhImmunity : Enhancement
 
     public override string ToString()
     {
-        return $"{Group}: {Type}: {percentage}% for {duration}";
+        return $"{Type()}: {percentage}% for {duration}";
     }
 
-    public override EffectData GetData()
-    {
-        var parameters = new SerializableDictionary<string, float>()
-        {
-            {percentageKey, percentage},
-            {durationKey, duration}
-        };
-
-        return new EffectData(Group, Type, parameters); 
-    }
 
 }

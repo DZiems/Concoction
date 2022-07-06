@@ -24,9 +24,9 @@ public class PlayerCharacter : Entity
     public PlayerCharacterMoveState moveState { get; private set; }
     public PlayerCharacterIdleState idleState { get; private set; }
 
+    //references
     public Controller Controller { get; private set; }
 
-    public string ProfileName { get; set; }
     public float AimReticleRange => aimReticleRange;
 
 
@@ -36,6 +36,14 @@ public class PlayerCharacter : Entity
     public void Initialize(Player player)
     {
         Controller = player.Controller;
+
+        if (!player.HasProfile)
+        {
+            gameObject.name = $"(TEST MODE) Character";
+            isInitialized = true;
+            return;
+        }
+
         gameObject.name = $"({player.profileData.profileName}) Character";
 
         robesSpRend.color = player.profileData.playerCharacterData.robesColor;

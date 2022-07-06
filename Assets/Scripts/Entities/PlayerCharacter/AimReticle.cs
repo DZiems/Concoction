@@ -79,14 +79,20 @@ public class AimReticle : MonoBehaviour
         //player
         this.controller = player.Controller;
         this.character = player.Character;
-        gameObject.name = $"({player.profileData.profileName}) Aim Reticle";
+
+        if (player.HasProfile)
+        {
+            gameObject.name = $"({player.profileData.profileName}) Aim Reticle";
+            spriteRenderer.color = player.profileData.playerCharacterData.aimReticleColor;
+        }
+        else
+            gameObject.name = $"(TEST MODE) Aim Reticle";
+
+        //position above player character's head.
         transform.position = character.transform.position + Vector3.up;
 
         //cached values
         maxSqRange = character.AimReticleRange * character.AimReticleRange;
-
-        //profile data
-        spriteRenderer.color = player.profileData.playerCharacterData.aimReticleColor;
 
         isInitialized = true;
     }

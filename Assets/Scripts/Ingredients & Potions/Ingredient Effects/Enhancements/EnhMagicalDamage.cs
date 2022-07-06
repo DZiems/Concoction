@@ -9,11 +9,17 @@ public class EnhMagicalDamage : Enhancement
 
     private float amountChanged;
 
+    public override EffectId Type() => EffectId.MagicalDamage;
+
+    public override SerializableDictionary<string, float> DataParameters() => 
+        new SerializableDictionary<string, float>()
+        {
+            {multiplierKey, multiplier},
+            {durationKey, duration}
+        };
+
     public EnhMagicalDamage(EnhMagicalDamageBlueprint magicalDamageBlueprint)
     {
-        Group = EffectGroup.Enhancement;
-        Type = EffectID.Enh_MagicalDamage;
-
         multiplier = Random.Range(magicalDamageBlueprint.multiplierMin, magicalDamageBlueprint.multiplierMax);
 
         duration = Random.Range(magicalDamageBlueprint.durationMin, magicalDamageBlueprint.durationMax);
@@ -22,9 +28,6 @@ public class EnhMagicalDamage : Enhancement
     }
     public EnhMagicalDamage(SerializableDictionary<string, float> parameters)
     {
-        Group = EffectGroup.Enhancement;
-        Type = EffectID.Enh_MagicalDamage;
-
         System.Diagnostics.Debug.Assert(parameters.ContainsKey(multiplierKey) && parameters.ContainsKey(durationKey));
 
         multiplier = parameters[multiplierKey];
@@ -53,18 +56,8 @@ public class EnhMagicalDamage : Enhancement
 
     public override string ToString()
     {
-        return $"{Group}: {Type}: {multiplier}x for {duration}";
+        return $"{Type()}: {multiplier}x for {duration}";
     }
 
-    public override EffectData GetData()
-    {
-        var parameters = new SerializableDictionary<string, float>()
-        {
-            {multiplierKey, multiplier},
-            {durationKey, duration}
-        };
-
-        return new EffectData(Group, Type, parameters);
-    }
 
 }

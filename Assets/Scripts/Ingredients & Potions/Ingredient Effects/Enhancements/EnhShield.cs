@@ -6,21 +6,27 @@ public class EnhShield : Enhancement
     Shield shield;
     float duration;
 
+    public override EffectId Type() => EffectId.Shield;
 
-    public EnhShield(EnhShieldBlueprint blueprint)
+    public override SerializableDictionary<string, float> DataParameters() => 
+        new SerializableDictionary<string, float>()
+        {
+            {shieldAmountKey, shield.amount},
+            { shieldDefenseKey, shield.defense},
+            { shieldResistanceKey, shield.resistance},
+            { shieldRechargeSpeedKey, shield.rechargeSpeed},
+            { shieldRechargeDelayKey, shield.rechargeDelay},
+            { durationKey, duration}
+        };
+
+public EnhShield(EnhShieldBlueprint blueprint)
     {
-        Group = EffectGroup.Enhancement;
-        Type = EffectID.Enh_Shield;
-
         shield = blueprint.GenerateShield();
         duration = blueprint.GenerateDuration();
     }
 
     public EnhShield(SerializableDictionary<string, float> parameters)
     {
-        Group = EffectGroup.Enhancement;
-        Type = EffectID.Enh_Shield;
-
         System.Diagnostics.Debug.Assert(parameters.ContainsKey(shieldAmountKey) && parameters.ContainsKey(shieldDefenseKey) && parameters.ContainsKey(shieldResistanceKey) && parameters.ContainsKey(shieldRechargeSpeedKey) && parameters.ContainsKey(shieldRechargeDelayKey) && parameters.ContainsKey(durationKey));
 
         shield.amount = parameters[shieldAmountKey];
@@ -48,22 +54,8 @@ public class EnhShield : Enhancement
     }
     public override string ToString()
     {
-        return $"{Group}: {Type}: {shield} for {duration}";
+        return $"{Type()}: {shield} for {duration}";
     }
 
-    public override EffectData GetData()
-    {
-        var parameters = new SerializableDictionary<string, float>()
-        {
-            {shieldAmountKey, shield.amount},
-            {shieldDefenseKey, shield.defense},
-            {shieldResistanceKey, shield.resistance},
-            {shieldRechargeSpeedKey, shield.rechargeSpeed},
-            {shieldRechargeDelayKey, shield.rechargeDelay},
-            {durationKey, duration}
-        };
-
-        return new EffectData(Group, Type, parameters); 
-    }
 
 }

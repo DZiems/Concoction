@@ -9,11 +9,8 @@ using UnityEngine;
 
 public class ProfileMenuHandler : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI continueText;
+    [SerializeField] private UIHoverableItem continueButton;
     [SerializeField] private ProfileMenu profileMenu;
-
-
-    private Animator continueTextAnim;
 
     private Player player;
 
@@ -21,15 +18,13 @@ public class ProfileMenuHandler : MonoBehaviour
 
     private void Awake()
     {
-        continueTextAnim = continueText.GetComponent<Animator>();
-
         confirmFlag = false;
     }
 
     private void Start()
     {
         player = PlayerManager.Instance.Player;
-        DeactivateContinueText();
+        continueButton.Deactivate();
     }
 
 
@@ -39,10 +34,10 @@ public class ProfileMenuHandler : MonoBehaviour
         {
             if (!confirmFlag)
             {
-                ActivateContinueText();
+                continueButton.Hover();
                 confirmFlag = true;
             }
-            //waits one frame until flag is up, that way when the player presses confirm, it doesn't also press continue with the same controller.InteractPress
+            //waits one frame until flag is up, that way when the player presses confirm on the profile menu, it doesn't also press this continue button in the same frame 
             else
             {
                 HandleContinueButton();
@@ -52,23 +47,11 @@ public class ProfileMenuHandler : MonoBehaviour
         {
             if (confirmFlag)
             {
-                DeactivateContinueText();
+                continueButton.Deactivate();
                 confirmFlag = false;
             }
         }
     }
-    private void DeactivateContinueText()
-    {
-        continueTextAnim.SetBool("IsHovered", false);
-        continueText.color = ColorPallete.inactiveColor;
-    }
-
-    private void ActivateContinueText()
-    {
-        continueTextAnim.SetBool("IsHovered", true);
-        continueText.color = ColorPallete.selectedColor;
-    }
-
 
     private void HandleContinueButton()
     {
@@ -77,7 +60,7 @@ public class ProfileMenuHandler : MonoBehaviour
             if (profileMenu.CurrentSelectedProfile != null)
             {
                 PlayerManager.Instance.AssignPlayerAProfile(profileMenu.CurrentSelectedProfile);
-                GameManager.Instance.GoToMostRecentScene();
+                SceneManager.Instance.RunLoadSceneAsync(SceneManager.SceneHomeBase);
             }
             else
             {

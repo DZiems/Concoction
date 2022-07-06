@@ -3,112 +3,44 @@
 [System.Serializable]
 public class IngredientData
 {
-    public string identity;
+    public string nameId;
     public int level;
     public RarityTier rarity;
-    public Region region;
-    public Taxonomy taxonomy;
 
-    public SerializableDictionary<EffectID, EffectData> effectDatas;
+    public SerializableDictionary<EffectId, EffectData> effectDatas;
 
-    public IngredientData(string identity, int level, RarityTier rarity, Region region, Taxonomy taxonomy, SerializableDictionary<EffectID, EffectData> effectDatas)
+    public IngredientData(string nameId, int level, RarityTier rarity, SerializableDictionary<EffectId, EffectData> effectDatas)
     {
-        this.identity = identity;
+        this.nameId = nameId;
         this.level = level;
         this.rarity = rarity;
-        this.region = region;
-        this.taxonomy = taxonomy;
         this.effectDatas = effectDatas;
     }
 
     public static Effect GetEffectFromData(EffectData effectData)
     {
-        switch (effectData.type)
+        switch (effectData.id)
         {
-            case EffectID.Enh_HealthRegen:
+            case EffectId.HealthRegen:
                 return new EnhHealthRegen(effectData.parameters);
-            case EffectID.Enh_MoveSpeed:
+            case EffectId.MoveSpeed:
                 return new EnhMoveSpeed(effectData.parameters);
-            case EffectID.Enh_CooldownModifier:
+            case EffectId.CooldownModifier:
                 return new EnhCooldownModifier(effectData.parameters);
-            case EffectID.Enh_MagicalDamage:
+            case EffectId.MagicalDamage:
                 return new EnhMagicalDamage(effectData.parameters);
-            case EffectID.Enh_Magnify:
-                throw new System.NotImplementedException();
-            case EffectID.Enh_Thorns:
+            case EffectId.Thorns:
                 return new EnhThorns(effectData.parameters);
-            case EffectID.Enh_Overheal:
-                throw new System.NotImplementedException();
-            case EffectID.Enh_Shield:
+            case EffectId.Shield:
                 return new EnhShield(effectData.parameters);
-            case EffectID.Enh_Foresight:
-                throw new System.NotImplementedException();
-            case EffectID.Enh_LingeringTrail:
-                throw new System.NotImplementedException();
-            case EffectID.Enh_MiniSeekers:
-                throw new System.NotImplementedException();
-            case EffectID.Enh_InvisibilityBubble:
-                throw new System.NotImplementedException();
-            case EffectID.Enh_Dematerialize:
-                throw new System.NotImplementedException();
-            case EffectID.Enh_BecomeShade:
-                throw new System.NotImplementedException();
-            case EffectID.Enh_Immunity:
+            case EffectId.Immunity:
                 return new EnhImmunity(effectData.parameters);
-            case EffectID.Enh_GrowVineWhips:
-                throw new System.NotImplementedException();
-            case EffectID.Enh_GrowStinger:
-                throw new System.NotImplementedException();
-            case EffectID.Enh_Contagion:
-                throw new System.NotImplementedException();
-            case EffectID.Enh_UmbralClone:
-                throw new System.NotImplementedException();
-            case EffectID.Enh_Echo:
-                throw new System.NotImplementedException();
-            case EffectID.Hnd_Slow:
-                throw new System.NotImplementedException();
-            case EffectID.Hnd_Daze:
-                throw new System.NotImplementedException();
-            case EffectID.Hnd_Shove:
-                throw new System.NotImplementedException();
-            case EffectID.Hnd_Blind:
-                throw new System.NotImplementedException();
-            case EffectID.Hnd_Fear:
-                throw new System.NotImplementedException();
-            case EffectID.Hnd_Gravitate:
-                throw new System.NotImplementedException();
-            case EffectID.Hnd_HealBlock:
-                throw new System.NotImplementedException();
-            case EffectID.Hnd_ReduceResistance:
-                throw new System.NotImplementedException();
-            case EffectID.Hnd_DisintegrateResistance:
-                throw new System.NotImplementedException();
-            case EffectID.Hnd_Expose:
-                throw new System.NotImplementedException();
-            case EffectID.Hnd_Beguile:
-                throw new System.NotImplementedException();
-            case EffectID.Hnd_Stinkify:
-                throw new System.NotImplementedException();
-            case EffectID.Dmg_Flat:
-                return new DmgFlat(effectData.parameters);
-            case EffectID.Dmg_Dot:
-                return new DmgDot(effectData.parameters);
-            case EffectID.Dmg_FlatDelayed:
-                throw new System.NotImplementedException();
-            case EffectID.Sph_HealthAsHealth:
-                throw new System.NotImplementedException();
-            case EffectID.Sph_HealthAsShield:
-                throw new System.NotImplementedException();
-            case EffectID.Sph_MagicDamage:
-                throw new System.NotImplementedException();
-            case EffectID.Sph_Defense:
-                throw new System.NotImplementedException();
-            case EffectID.Sph_Resistance:
-                throw new System.NotImplementedException();
-            case EffectID.Sph_MoveSpeed:
-                throw new System.NotImplementedException();
+            case EffectId.FlatDmg:
+                return new FlatDmg(effectData.parameters);
+            case EffectId.DotDmg:
+                return new DotDmg(effectData.parameters);
             default:
-                Debug.LogError("IngredientData GetEffectFromData(): Somehow reached default case in an enum switch statement, which means a newly added EffectID case has not been implemented");
+                Debug.LogError($"IngredientData GetEffectFromData(): case for {effectData.id} has not been implemented into the switch statement. ");
                 throw new System.ArgumentOutOfRangeException();
         }
     }

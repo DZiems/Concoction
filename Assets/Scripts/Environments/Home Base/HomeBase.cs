@@ -32,20 +32,38 @@ public class HomeBase : Room, IDataPersistence
     //IDataPersistence
     public void LoadData(GameData data)
     {
-        HomeBaseData homeBaseData = data.CurrentPlayerProfileData.homeBaseData;
+        HomeBaseData homeBaseData;
+        if (data.CurrentPlayerProfileData == null)
+        {
+            Debug.LogWarning("HomeBase is loading before a player has chosen a profile (fine if testing from somewhere other than main menu). Returning a default home base.");
+            homeBaseData = new HomeBaseData();
+        }
+        else
+        {
+            homeBaseData = data.CurrentPlayerProfileData.homeBaseData;
+        }
 
         width = homeBaseData.width;
         height = homeBaseData.height;
         cellSize = homeBaseData.cellSize;
         origin = new Vector3(homeBaseData.origin[0], homeBaseData.origin[1]);
 
+        Debug.Log($"Home Base Width: {width}, Height: {height}");
+
         Build(homeBaseData.stationData);
+
 
         isLoaded = true;
     }
 
     public void SaveData(GameData data)
     {
+        if (data.CurrentPlayerProfileData == null)
+        {
+            Debug.LogWarning("HomeBase is saving before a player has chosen a profile (fine if testing from somewhere other than main menu). Returning without saving.");
+            return;
+        }
+
         string playerProfileName = PlayerManager.Instance.Player.profileData.profileName;
 
         data.allPlayerProfileDatas[playerProfileName].homeBaseData = new HomeBaseData(this);

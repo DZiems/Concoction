@@ -14,11 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   flatDamageConvertedToDotMin:
     physical: 20
-    magical: 10
+    magical: 20
     trueDmg: 0
   flatDamageConvertedToDotMax:
-    physical: 30
-    magical: 20
+    physical: 50
+    magical: 50
     trueDmg: 0
   durationMin: 4
   durationMax: 10

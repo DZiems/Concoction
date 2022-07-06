@@ -5,32 +5,29 @@ public class InMainSubState : UIState
 {
     protected Controller controller;
     protected InMainState parentState;
-    protected ProfileMenu profileMenu;
-    protected Animator buttonAnim;
-    protected TextMeshProUGUI buttonText;
+    protected UIHoverableItem button;
 
-    public InMainSubState(ProfileMenu profileMenu, InMainState parentState, Controller controller, UIFiniteStateMachine stateMachine, Animator buttonAnim, TextMeshProUGUI buttonText) : base(stateMachine)
+    public InMainSubState(InMainState parentState, Controller controller, UIFiniteStateMachine stateMachine, UIHoverableItem button) : base(stateMachine)
     {
         this.controller = controller;
-        this.profileMenu = profileMenu;
         this.parentState = parentState;
-        this.buttonAnim = buttonAnim;
-        this.buttonText = buttonText;
+        this.button = button;
 
-        StopHover();
+        button.Unhover();
     }
 
     public override void Enter()
     {
         base.Enter();
-        StartHover();
+
+        button.Hover();
     }
 
     public override void Exit()
     {
         base.Exit();
 
-        StopHover();
+        button.Unhover();
     }
 
     public override void LogicUpdate()
@@ -38,14 +35,4 @@ public class InMainSubState : UIState
         base.LogicUpdate();
     }
 
-    public void StartHover()
-    {
-        buttonAnim.SetBool("IsHovered", true);
-        buttonText.color = ColorPallete.selectedColor;
-    }
-    public void StopHover()
-    {
-        buttonAnim.SetBool("IsHovered", false);
-        buttonText.color = ColorPallete.unselectedColor;
-    }
 }

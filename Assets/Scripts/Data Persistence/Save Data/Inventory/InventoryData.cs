@@ -2,18 +2,20 @@
 [System.Serializable]
 public class InventoryData
 {
-    public PotionData[] potionDatas;
     public IngredientData[] ingredientDatas;
+    public ulong[] ingredientDataOrdersAcquired;
+    public ulong numIngredientsAcquired;
 
     public InventoryData()
     {
-        this.potionDatas = new PotionData[0];
         this.ingredientDatas = new IngredientData[0];
+        this.numIngredientsAcquired = 0;
     }
 
-    public InventoryData(PotionData[] potionDatas, IngredientData[] ingredientDatas)
+    public InventoryData(IngredientData[] ingredientDatas, ulong[] ordersIngredientsAcquired, ulong numIngredientsAcquired)
     {
-        this.potionDatas = potionDatas;
         this.ingredientDatas = ingredientDatas;
+        this.ingredientDataOrdersAcquired = ordersIngredientsAcquired;
+        this.numIngredientsAcquired = numIngredientsAcquired;
     }
 }

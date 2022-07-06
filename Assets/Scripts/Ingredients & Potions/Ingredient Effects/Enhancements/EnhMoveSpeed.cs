@@ -10,11 +10,17 @@ public class EnhMoveSpeed : Enhancement
 
     private float amountChanged;
 
+    public override EffectId Type() => EffectId.MoveSpeed;
+
+    public override SerializableDictionary<string, float> DataParameters() =>
+        new SerializableDictionary<string, float>()
+        {
+            {multiplierKey, multiplier},
+            {durationKey, duration}
+        };
+
     public EnhMoveSpeed(EnhMoveSpeedBlueprint moveSpeedBlueprint)
     {
-        Group = EffectGroup.Enhancement;
-        Type = EffectID.Enh_MagicalDamage;
-
         multiplier = Random.Range(moveSpeedBlueprint.multiplierMin, moveSpeedBlueprint.multiplierMax);
 
         duration = Random.Range(moveSpeedBlueprint.durationMin, moveSpeedBlueprint.durationMax);
@@ -24,9 +30,6 @@ public class EnhMoveSpeed : Enhancement
 
     public EnhMoveSpeed(SerializableDictionary<string, float> parameters)
     {
-        Group = EffectGroup.Enhancement;
-        Type = EffectID.Enh_MagicalDamage;
-
         System.Diagnostics.Debug.Assert(parameters.ContainsKey(multiplierKey) && parameters.ContainsKey(durationKey));
 
         multiplier = parameters[multiplierKey];
@@ -56,18 +59,7 @@ public class EnhMoveSpeed : Enhancement
     }
     public override string ToString()
     {
-        return $"{Group}: {Type}: {multiplier}x for {duration}";
-    }
-
-    public override EffectData GetData()
-    {
-        var parameters = new SerializableDictionary<string, float>()
-        {
-            {multiplierKey, multiplier},
-            {durationKey, duration}
-        };
-
-        return new EffectData(Group, Type, parameters);
+        return $"{Type()}: {multiplier}x for {duration}";
     }
 
 }

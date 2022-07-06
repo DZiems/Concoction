@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerManager : MonoBehaviour, IDataPersistence
+public class PlayerManager : MonoBehaviour
 {
     public static PlayerManager Instance { get; private set; }
 
@@ -16,35 +16,7 @@ public class PlayerManager : MonoBehaviour, IDataPersistence
     public PlayerCharacter BaseCharacterPrefab => baseCharacterPrefab;
     public AimReticle BaseAimReticlePrefab => baseAimReticlePrefab;
 
-    private bool isLoaded;
 
-    public Dictionary<string, PlayerProfileData> allPlayerProfileDatas { get; private set; }
-
-    public void LoadData(GameData data)
-    {
-        if (allPlayerProfileDatas != null)
-            allPlayerProfileDatas.Clear();
-        else
-            allPlayerProfileDatas = new Dictionary<string, PlayerProfileData>();
-
-
-        foreach (var kvp in data.allPlayerProfileDatas)
-            allPlayerProfileDatas.Add(kvp.Key, kvp.Value);
-
-        isLoaded = true;
-    }
-
-    public void SaveData(GameData data)
-    {
-        //for each existing key, just overwrite the data; for all new keys, add.
-        foreach (var kvp in allPlayerProfileDatas)
-        {
-            if (!data.allPlayerProfileDatas.ContainsKey(kvp.Key))
-                data.allPlayerProfileDatas.Add(kvp.Key, kvp.Value);
-            else 
-                data.allPlayerProfileDatas[kvp.Key] = kvp.Value;
-        }
-    }
     
     private void Awake()
     {
@@ -58,20 +30,12 @@ public class PlayerManager : MonoBehaviour, IDataPersistence
         Instance = this;
         DontDestroyOnLoad(Instance);
 
-        isLoaded = false;
         Player = GetComponentInChildren<Player>();
     }
 
 
     internal void AssignController(Controller controller)
     {
-        if (!isLoaded)
-        {
-            Debug.LogError("PlayerManager AssignControllerAndPromptProfile() could not be called because save data isn't yet loaded");
-            return;
-
-        }
-        
         Player.AssignController(controller);
         onPlayerJoined?.Invoke();
     }
@@ -92,10 +56,10 @@ public class PlayerManager : MonoBehaviour, IDataPersistence
 
     public void AssignPlayerAProfile(string profileName)
     {
-        if (allPlayerProfileDatas.ContainsKey(profileName))
+        var currentProfileDatas = DataPersistenceManager.Instance.AllProfileDatas;
+        if (currentProfileDatas.ContainsKey(profileName))
         {
-            Debug.Log("ASSIGNINGPLAYERPROFILE");
-            Player.AssignProfile(allPlayerProfileDatas[profileName]);
+            Player.AssignProfile(currentProfileDatas[profileName]);
         }
         else
         {

@@ -9,13 +9,13 @@ public class InMainState : ProfileMenuState
     public InHoveringConfirmState hoveringConfirmState { get; private set; }
     public InHoveringGoBackState hoveringGoBackState { get; private set; }
 
-    public InMainState(ProfileMenu profileMenu, Controller controller, UIFiniteStateMachine stateMachine, Animator dropdownAnimator, TextMeshProUGUI dropdownText, Animator confirmAnimator, TextMeshProUGUI confirmText, Animator goBackAnimator, TextMeshProUGUI goBackText) : base(profileMenu, controller, stateMachine)
+    public InMainState(ProfileMenu profileMenu, Controller controller, UIFiniteStateMachine stateMachine, MyDropdown dropdown, UIHoverableItem confirmButton, UIHoverableItem goBackButton) : base(profileMenu, controller, stateMachine)
     {
         innerStateMachine = new UIFiniteStateMachine();
 
-        hoveringDropdownState = new InHoveringDropdownState(profileMenu, this, controller, innerStateMachine, dropdownAnimator, dropdownText);
-        hoveringConfirmState = new InHoveringConfirmState(profileMenu, this, controller, innerStateMachine, confirmAnimator, confirmText);
-        hoveringGoBackState = new InHoveringGoBackState(profileMenu, this, controller, innerStateMachine, goBackAnimator, goBackText);
+        hoveringDropdownState = new InHoveringDropdownState(this, controller, innerStateMachine, dropdown);
+        hoveringConfirmState = new InHoveringConfirmState(this, controller, innerStateMachine, confirmButton);
+        hoveringGoBackState = new InHoveringGoBackState(profileMenu, this, controller, innerStateMachine, goBackButton);
 
     }
 
@@ -30,9 +30,8 @@ public class InMainState : ProfileMenuState
     {
         base.Exit();
 
-        hoveringDropdownState.StopHover();
-        hoveringConfirmState.StopHover();
-        hoveringGoBackState.StopHover();
+        hoveringConfirmState.Exit();
+        hoveringGoBackState.Exit();
     }
 
     public override void LogicUpdate()

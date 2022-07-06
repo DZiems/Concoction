@@ -17,6 +17,7 @@ public class DataPersistenceManager : MonoBehaviour
     private List<IDataPersistence> dataPersistenceObjects;
 
     public static DataPersistenceManager Instance { get; private set; }
+    public SerializableDictionary<string, PlayerProfileData> AllProfileDatas => gameData.allPlayerProfileDatas;
 
     private void Awake()
     {
@@ -36,7 +37,6 @@ public class DataPersistenceManager : MonoBehaviour
     public void OnSceneLoaded()
     {
         this.dataPersistenceObjects = FindAllDataPersistenceObjects();
-        //first load
         LoadGame();
     }
 
@@ -88,8 +88,6 @@ public class DataPersistenceManager : MonoBehaviour
         gameData.allPlayerProfileDatas.Add(
                profileToAdd,
                new PlayerProfileData(profileToAdd));
-
-        PlayerManager.Instance.LoadData(gameData);
     }
 
     public void DeletePlayerProfile(string profileToDelete)
@@ -102,8 +100,6 @@ public class DataPersistenceManager : MonoBehaviour
         else
             Debug.LogError($"Attempted to remove nonexistent profile {profileToDelete}");
 
-
-        PlayerManager.Instance.LoadData(gameData);
     }
 
 

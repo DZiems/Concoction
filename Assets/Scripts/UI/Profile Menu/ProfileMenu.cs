@@ -5,10 +5,10 @@ using UnityEngine;
 
 public class ProfileMenu : MonoBehaviour
 {
-    [SerializeField] private MyDropdown dropdown;
     [SerializeField] private AlphabetFieldPrompt alphabetFieldPrompt;
-    [SerializeField] private GameObject confirmButton;
-    [SerializeField] private GameObject goBackButton;
+    [SerializeField] private MyDropdown dropdown;
+    [SerializeField] private UIHoverableItem confirmButton;
+    [SerializeField] private UIHoverableItem goBackButton;
 
     //state machine
     private UIFiniteStateMachine stateMachine;
@@ -31,17 +31,8 @@ public class ProfileMenu : MonoBehaviour
         stateMachine = new UIFiniteStateMachine();
         var controller = PlayerManager.Instance.Player.Controller;
 
-        var dropdownAnimator = dropdown.GetComponent<Animator>();
-        var dropdownText = dropdown.GetComponentInChildren<TextMeshProUGUI>();
-
-        var confirmAnimator = confirmButton.GetComponent<Animator>();
-        var confirmText = confirmButton.GetComponentInChildren<TextMeshProUGUI>();
-
-        var goBackAnimator = goBackButton.GetComponent<Animator>();
-        var goBackText = goBackButton.GetComponentInChildren<TextMeshProUGUI>();
-
         //states
-        mainState = new InMainState(this, controller, stateMachine, dropdownAnimator, dropdownText, confirmAnimator, confirmText, goBackAnimator, goBackText);
+        mainState = new InMainState(this, controller, stateMachine, dropdown, confirmButton, goBackButton);
 
         dropdownState = new InDropdownState(this, controller, stateMachine, dropdown);
 
@@ -56,9 +47,12 @@ public class ProfileMenu : MonoBehaviour
     //TODO: fix deletion causing wrong item to be selected.
     private void Start()
     {
-        dropdown.Initialize(PlayerManager.Instance.allPlayerProfileDatas.Keys.ToList());
+        var currentProfileDatas = DataPersistenceManager.Instance.AllProfileDatas;
+        dropdown.Initialize(currentProfileDatas.Keys.ToList());
 
         Anim.SetBool("Active", true);
+
+
     }
 
     private void Update()
@@ -68,7 +62,7 @@ public class ProfileMenu : MonoBehaviour
 
     public void HandleGoBack()
     {
-        GameManager.Instance.ResetGameToMainMenu();
+        SceneManager.Instance.ResetGameToMainMenu();
     }
 
     // profileMenu.Anim.SetBool("Active", true);

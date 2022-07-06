@@ -3,8 +3,10 @@ using UnityEngine;
 
 public class InHoveringGoBackState : InMainSubState
 {
-    public InHoveringGoBackState(ProfileMenu profileMenu, InMainState parentState, Controller controller, UIFiniteStateMachine stateMachine, Animator buttonAnim, TextMeshProUGUI buttonText) : base(profileMenu, parentState, controller, stateMachine, buttonAnim, buttonText)
+    ProfileMenu profileMenu;
+    public InHoveringGoBackState(ProfileMenu profileMenu, InMainState parentState, Controller controller, UIFiniteStateMachine stateMachine, UIHoverableItem button) : base(parentState, controller, stateMachine, button)
     {
+        this.profileMenu = profileMenu;
     }
 
     public override void Enter()

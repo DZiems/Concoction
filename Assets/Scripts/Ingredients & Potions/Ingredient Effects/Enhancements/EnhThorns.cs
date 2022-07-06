@@ -10,11 +10,19 @@ public class EnhThorns : Enhancement
 
     float duration;
 
+    public override EffectId Type() => EffectId.Thorns;
+
+    public override SerializableDictionary<string, float> DataParameters() => 
+        new SerializableDictionary<string, float>()
+        {
+            {physicalThornsFactorKey, physicalThornsFactor},
+            {magicalThornsFactorKey, magicalThornsFactor},
+            {trueDmgThornsFactorKey, trueDmgThornsFactor},
+            {durationKey, duration}
+        };
+
     public EnhThorns(EnhThornsBlueprint blueprint)
     {
-        Group = EffectGroup.Enhancement;
-        Type = EffectID.Enh_Thorns;
-
         physicalThornsFactor = blueprint.GeneratePhysicalThornsFactor();
         magicalThornsFactor = blueprint.GenerateMagicalThornsFactor();
         trueDmgThornsFactor = blueprint.GenerateTrueDmgThornsFactor();
@@ -23,8 +31,6 @@ public class EnhThorns : Enhancement
 
     public EnhThorns(SerializableDictionary<string, float> parameters)
     {
-        Group = EffectGroup.Enhancement;
-        Type = EffectID.Enh_Thorns;
 
         System.Diagnostics.Debug.Assert(parameters.ContainsKey(physicalThornsFactorKey) && parameters.ContainsKey(magicalThornsFactorKey) && parameters.ContainsKey(trueDmgThornsFactorKey) && parameters.ContainsKey(durationKey));
 
@@ -70,20 +76,7 @@ public class EnhThorns : Enhancement
     }
     public override string ToString()
     {
-        return $"{Group}: {Type}: {physicalThornsFactor}x phys, {magicalThornsFactor}x mag, {trueDmgThornsFactor}x true, for {duration}s";
-    }
-
-    public override EffectData GetData()
-    {
-        var parameters = new SerializableDictionary<string, float>()
-        {
-            {physicalThornsFactorKey, physicalThornsFactor},
-            {magicalThornsFactorKey, magicalThornsFactor},
-            {trueDmgThornsFactorKey, trueDmgThornsFactor},
-            {durationKey, duration}
-        };
-
-        return new EffectData(Group, Type, parameters);
+        return $"{Type()}: {physicalThornsFactor}x phys, {magicalThornsFactor}x mag, {trueDmgThornsFactor}x true, for {duration}s";
     }
 
 }

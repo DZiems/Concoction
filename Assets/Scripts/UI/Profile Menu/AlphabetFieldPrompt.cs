@@ -80,7 +80,7 @@ public class AlphabetFieldPrompt : MonoBehaviour
             foreach (var letterTMP in itemRow.GetComponentsInChildren<TextMeshProUGUI>())
             {
                 lowercaseLetters[row, column] = letterTMP;
-                letterTMP.color = ColorPallete.unselectedColor;
+                letterTMP.color = ColorPallete.unselectedText;
                 letterTMP.transform.localScale = Vector3.one;
                 column++;
             }
@@ -96,7 +96,7 @@ public class AlphabetFieldPrompt : MonoBehaviour
             foreach (var letterTMP in itemRow.GetComponentsInChildren<TextMeshProUGUI>())
             {
                 uppercaseLetters[row, column] = letterTMP;
-                letterTMP.color = ColorPallete.unselectedColor;
+                letterTMP.color = ColorPallete.unselectedText;
                 letterTMP.transform.localScale = Vector3.one;
                 column++;
             }
@@ -137,12 +137,12 @@ public class AlphabetFieldPrompt : MonoBehaviour
         if (string.IsNullOrEmpty(currentName))
         {
             textField.SetText(enterNamePrompt);
-            textField.color = ColorPallete.inactiveColor;
+            textField.color = ColorPallete.inactiveText;
         }
         else
         {
             textField.SetText(currentName);
-            textField.color = ColorPallete.selectedColor;
+            textField.color = ColorPallete.selectedText;
         }
     }
 
@@ -240,12 +240,12 @@ public class AlphabetFieldPrompt : MonoBehaviour
     {
         if (isLowercase)
         {
-            lowercaseLetters[y, x].color = ColorPallete.selectedColor;
+            lowercaseLetters[y, x].color = ColorPallete.selectedText;
             lowercaseLetters[y, x].transform.localScale *= selectLetterScaleFactor;
         }
         else
         {
-            uppercaseLetters[y, x].color = ColorPallete.selectedColor;
+            uppercaseLetters[y, x].color = ColorPallete.selectedText;
             uppercaseLetters[y, x].transform.localScale *= selectLetterScaleFactor;
         }
     }
@@ -254,12 +254,12 @@ public class AlphabetFieldPrompt : MonoBehaviour
     {
         if (isLowercase)
         {
-            lowercaseLetters[y, x].color = ColorPallete.unselectedColor;
+            lowercaseLetters[y, x].color = ColorPallete.unselectedText;
             lowercaseLetters[y, x].transform.localScale = Vector3.one;
         }
         else
         {
-            uppercaseLetters[y, x].color = ColorPallete.unselectedColor;
+            uppercaseLetters[y, x].color = ColorPallete.unselectedText;
             uppercaseLetters[y, x].transform.localScale = Vector3.one;
         }
     }

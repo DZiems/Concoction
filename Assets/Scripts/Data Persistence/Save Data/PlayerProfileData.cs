@@ -9,12 +9,10 @@ public class PlayerProfileData
     public HomeBaseData homeBaseData;
     public InventoryData inventoryData;
     public string profileName;
-    public string mostRecentScene;
 
     public PlayerProfileData(string profileName)
     {
         this.profileName = profileName;
-        mostRecentScene = GameManager.SceneHomeBase;
 
         playerCharacterData = new PlayerCharacterData();
         homeBaseData = new HomeBaseData();
@@ -24,7 +22,6 @@ public class PlayerProfileData
     public PlayerProfileData(string profileName, string mostRecentScene, PlayerCharacterData playerCharacterData, HomeBaseData homeBaseData, InventoryData inventoryData)
     {
         this.profileName = profileName;
-        this.mostRecentScene = mostRecentScene;
 
         this.playerCharacterData = playerCharacterData;
         this.homeBaseData = homeBaseData;

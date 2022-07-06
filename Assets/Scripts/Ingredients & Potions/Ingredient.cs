@@ -4,85 +4,64 @@ using UnityEngine;
 
 public class Ingredient
 {
-    public string identity;
-    public int level { get; private set; }
-    public RarityTier rarity { get; private set; }
-    public Region region { get; private set; }
-    public Taxonomy taxonomy { get; private set; }
+    public IngredientId Id { get; private set; }
 
-    public Enhancement[] enhanceEffects;
-    public Impairment[] impairEffects;
+    public int Level { get; private set; }
+    public RarityTier Rarity { get; private set; }
 
-    public Ingredient(IngredientBlueprint blueprint)
+
+    public List<Enhancement> EnhanceEffects { get; private set; }
+    public List<Impairment> ImpairEffects { get; private set; }
+
+  
+    public Ingredient(IngredientBlueprint blueprint, int level)
     {
-        identity = blueprint.identity;
-        level = blueprint.level;
-        rarity = blueprint.rarity;
-        region = blueprint.region;
-        taxonomy = blueprint.taxonomy;
+        Id = blueprint.id;
+        Level = level;
 
-        enhanceEffects = new Enhancement[blueprint.enhanceEffectBlueprints.Length];
-        impairEffects = new Impairment[blueprint.impairEffectBlueprints.Length];
+        Rarity = blueprint.rarityRoller.Roll();
+        var effects = blueprint.effectRoller.Roll(Rarity);
 
-        int i = 0;
-        foreach (var enhanceBP in blueprint.enhanceEffectBlueprints)
-            enhanceEffects[i++] = enhanceBP.Generate();
-
-        i = 0;
-        foreach (var impairBP in blueprint.impairEffectBlueprints) 
-            impairEffects[i++] = impairBP.Generate();
-
-        //TODO:
-        /*
-         * foreach enhancement in enhanceEffects, apply level multiplier
-         * foreach impairment in impairEffects, apply level multiplier
-         * make apply level multiplier, make it just generic applyMultiplier(multiplier), because
-         * later it can be used for synergy multipliers as well
-         */
+        EnhanceEffects = effects.Item1;
+        ImpairEffects = effects.Item2;
     }
 
     public Ingredient(IngredientData data)
     {
-        identity = data.identity;
-        level = data.level;
-        rarity = data.rarity;
-        region = data.region;
-        taxonomy = data.taxonomy;
+        Id = DataDictionaryManager.Instance.IngredientIds[data.nameId];
+        if (Id == null)
+            Debug.LogError($"Ingredient constructor failed to retrieve Id from Data Dictionary. Name: {data.nameId}");
 
-        //effect datas get parsed into collection of instantiated enhancements and impairments here.
-        int enhCount = 0, impCount = 0;
-        foreach (var effectData in data.effectDatas.Values)
-        {
-            if (effectData.group == EffectGroup.Enhancement)
-                enhCount++;
-            else if (effectData.group == EffectGroup.Impairment)
-                impCount++;
-        }
 
-        enhanceEffects = new Enhancement[enhCount];
-        impairEffects = new Impairment[impCount];
-        int enhInd = 0, impInd = 0;
+        Level = data.level;
+        Rarity = data.rarity;
+
+        //effecs are constructed from their data and sorted between enhancements/impairments here
+        EnhanceEffects = new List<Enhancement>();
+        ImpairEffects = new List<Impairment>();
         foreach (var effectData in data.effectDatas.Values)
         {
             var effect = IngredientData.GetEffectFromData(effectData);
-            if (effectData.group == EffectGroup.Enhancement)
-                enhanceEffects[enhInd++] = (Enhancement)effect;
-            else if (effectData.group == EffectGroup.Impairment)
-                impairEffects[impInd++] = (Impairment)effect;
+
+            if (effect is Enhancement enhancement)
+                EnhanceEffects.Add(enhancement);
+
+            else if (effect is Impairment impairment)
+                ImpairEffects.Add(impairment);
         }
     }
 
 
-    public IngredientData GetData() 
+    public IngredientData ToData() 
     {
-        var effectDatas = new SerializableDictionary<EffectID, EffectData>();
-        foreach (var enhancement in enhanceEffects)
-            effectDatas.Add(enhancement.Type, enhancement.GetData());
+        var effectDatas = new SerializableDictionary<EffectId, EffectData>();
+        foreach (var enhancement in EnhanceEffects)
+            effectDatas.Add(enhancement.Type(), enhancement.ToData());
 
-        foreach (var impairment in impairEffects)
-            effectDatas.Add(impairment.Type, impairment.GetData());
+        foreach (var impairment in ImpairEffects)
+            effectDatas.Add(impairment.Type(), impairment.ToData());
 
-        return new IngredientData(identity, level, rarity, region, taxonomy, effectDatas);
+        return new IngredientData(Id.stringId, Level, Rarity, effectDatas);
     }
 
     //TODO: figure out cooldown math
@@ -99,14 +78,14 @@ public class Ingredient
 
     public override string ToString()
     {
-        string theString = $"Id: {identity}, lv: {level}, rarity: {rarity}, region: {region}, taxonomy: {taxonomy}";
+        string theString = $"Id: {Id.stringId}, lv: {Level}, rarity: {Rarity}, region: {Id.region}, taxonomy: {Id.taxonomy}";
         theString += "\n\tenhancements: ";
-        foreach (var enhancement in enhanceEffects)
+        foreach (var enhancement in EnhanceEffects)
         {
             theString += $"\n\t\t{enhancement}";
         }
         theString += "\n\timpairments: ";
-        foreach (var impairment in impairEffects)
+        foreach (var impairment in ImpairEffects)
         {
             theString += $"\n\t\t{impairment}";
         }
