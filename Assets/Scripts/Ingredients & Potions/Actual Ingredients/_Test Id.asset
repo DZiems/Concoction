@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stringId: Test Id Name
   icon: {fileID: 0}
-  region: 0
-  taxonomy: 0
+  region: 2
+  taxonomy: 2

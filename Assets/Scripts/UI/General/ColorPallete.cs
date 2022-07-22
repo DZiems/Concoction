@@ -11,16 +11,10 @@ public static class ColorPallete
     //808080
     public static readonly Color inactiveText = new Color(0.5f, 0.5f, 0.5f, 0.75f);
 
-    //7d5ea6
-    public static readonly Color hoveredButton = new Color(0.4901961f, 0.3686275f, 0.6509804f);
-    //554565
-    public static readonly Color unhoveredButton = new Color(0.3333333f, 0.2705882f, 0.3960784f);
-    //000000
-    public static readonly Color inactiveButton = new Color(0f, 0f, 0f, 0.3333333f);
 
-    public static readonly Color dropdownFieldSelected = new Color(0.2666667f, 0.2f, 0.3254902f, 1);
+    public static readonly Color dropdownFieldSelected = new Color(0.5f, 0.5f, 0.5f, 1);
     public static readonly Color dropdownFieldHighlighted = new Color(0.4f, 0.4f, 0.4f, 1);
-    public static readonly Color dropdownFieldSelectAndHighlight = new Color(0.4666667f, 0.4f, 0.5254902f, 1);
+    public static readonly Color dropdownFieldSelectAndHighlight = new Color(0.6666666f, 0.6666666f, 0.6666666f, 1);
     public static readonly Color dropdownFieldNormal = new Color(0.25f, 0.25f, 0.25f, 1);
                    
     public static readonly Color dropdownTextSelected = Color.white;

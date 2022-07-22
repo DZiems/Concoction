@@ -11,8 +11,7 @@ public class MainMenuButtonsHandler : MonoBehaviour
 {
     private Controller controller;
     
-    //crude, but fine for a simple 3-button menu like this
-    private UIHoverableItem[] buttons;
+    [SerializeField] private UIHoverableText[] buttons;
     private const int playButtonInd = 0;
     private const int settingsButtonInd = 1;
     private const int quitButtonInd = 2;
@@ -25,8 +24,6 @@ public class MainMenuButtonsHandler : MonoBehaviour
 
     private void Awake()
     {
-        buttons = GetComponentsInChildren<UIHoverableItem>();
-
 
         buttonsInd = playButtonInd;
     }

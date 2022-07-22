@@ -7,8 +7,8 @@ public class ProfileMenu : MonoBehaviour
 {
     [SerializeField] private AlphabetFieldPrompt alphabetFieldPrompt;
     [SerializeField] private MyDropdown dropdown;
-    [SerializeField] private UIHoverableItem confirmButton;
-    [SerializeField] private UIHoverableItem goBackButton;
+    [SerializeField] private UIHoverableText confirmButton;
+    [SerializeField] private UIHoverableText goBackButton;
 
     //state machine
     private UIFiniteStateMachine stateMachine;
@@ -17,8 +17,6 @@ public class ProfileMenu : MonoBehaviour
     public InCreateProfileState createProfileState { get; private set; }
     public InConfirmedState confirmedState { get; private set; }
 
-    public Animator Anim { get; private set; }
-
     public string CurrentSelectedProfile => dropdown.SelectedItem;
 
     public bool HasConfirmed => stateMachine.CurrentState == confirmedState;
@@ -26,10 +24,9 @@ public class ProfileMenu : MonoBehaviour
 
     private void Awake()
     {
-        Anim = GetComponent<Animator>();
-
         stateMachine = new UIFiniteStateMachine();
         var controller = PlayerManager.Instance.Player.Controller;
+
 
         //states
         mainState = new InMainState(this, controller, stateMachine, dropdown, confirmButton, goBackButton);
@@ -41,7 +38,6 @@ public class ProfileMenu : MonoBehaviour
         confirmedState = new InConfirmedState(this, controller, stateMachine);
 
         stateMachine.Initialize(mainState);
-
     }
 
     //TODO: fix deletion causing wrong item to be selected.
@@ -50,9 +46,7 @@ public class ProfileMenu : MonoBehaviour
         var currentProfileDatas = DataPersistenceManager.Instance.AllProfileDatas;
         dropdown.Initialize(currentProfileDatas.Keys.ToList());
 
-        Anim.SetBool("Active", true);
-
-
+        alphabetFieldPrompt.Hide();
     }
 
     private void Update()
@@ -64,8 +58,6 @@ public class ProfileMenu : MonoBehaviour
     {
         SceneManager.Instance.ResetGameToMainMenu();
     }
-
-    // profileMenu.Anim.SetBool("Active", true);
 
     public void HandleCreateProfile(string profileToAdd)
     {

@@ -5,23 +5,29 @@ using UnityEngine;
 
 public class MyDropdownRegion : MonoBehaviour
 {
+    [SerializeField] private RectTransform dropdownRectTransform;
     public List<MyDropdownField> fields = new List<MyDropdownField>();
 
     public float Width { get; private set; }
     public float Height { get; private set; }
 
-    private void Awake()
+
+    private void Start()
     {
-        StartCoroutine(SetDimensionAccessors());
+
+        StartCoroutine(SetDimensions());
     }
 
-    private IEnumerator SetDimensionAccessors()
+    private IEnumerator SetDimensions()
     {
         yield return new WaitForEndOfFrame();
 
-        var rect = GetComponent<RectTransform>().rect;
-        Width = rect.width;
-        Height = rect.height;
+
+        var rectTransform = GetComponent<RectTransform>();
+        rectTransform.anchoredPosition = new Vector2(0, -dropdownRectTransform.rect.height);
+
+        Width = rectTransform.rect.width;
+        Height = rectTransform.rect.height;
     }
 
     public void Clear()

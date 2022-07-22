@@ -3,8 +3,10 @@ using UnityEngine;
 
 public class InHoveringConfirmState : InMainSubState
 {
-    public InHoveringConfirmState(InMainState parentState, Controller controller, UIFiniteStateMachine stateMachine, UIHoverableItem button) : base(parentState, controller, stateMachine, button)
+    private MyDropdown dropdown;
+    public InHoveringConfirmState(InMainState parentState, Controller controller, UIFiniteStateMachine stateMachine, UIHoverableText button, MyDropdown dropdown) : base(parentState, controller, stateMachine, button)
     {
+        this.dropdown = dropdown;
     }
 
     public override void Enter()
@@ -31,7 +33,10 @@ public class InHoveringConfirmState : InMainSubState
         }
         else if (controller.InteractPress)
         {
-            parentState.EnterConfirmedState();
+            if (dropdown.SelectedItem != null)
+                parentState.EnterConfirmedState();
+            else
+                Debug.Log("Indicate to the user that they need to select a profile still");
         }
         else if (controller.Slot0Press)
         {

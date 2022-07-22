@@ -5,9 +5,9 @@ public class InMainSubState : UIState
 {
     protected Controller controller;
     protected InMainState parentState;
-    protected UIHoverableItem button;
+    protected UIHoverableText button;
 
-    public InMainSubState(InMainState parentState, Controller controller, UIFiniteStateMachine stateMachine, UIHoverableItem button) : base(stateMachine)
+    public InMainSubState(InMainState parentState, Controller controller, UIFiniteStateMachine stateMachine, UIHoverableText button) : base(stateMachine)
     {
         this.controller = controller;
         this.parentState = parentState;

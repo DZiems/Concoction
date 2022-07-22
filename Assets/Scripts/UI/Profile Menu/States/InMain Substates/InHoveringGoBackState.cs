@@ -4,7 +4,7 @@ using UnityEngine;
 public class InHoveringGoBackState : InMainSubState
 {
     ProfileMenu profileMenu;
-    public InHoveringGoBackState(ProfileMenu profileMenu, InMainState parentState, Controller controller, UIFiniteStateMachine stateMachine, UIHoverableItem button) : base(parentState, controller, stateMachine, button)
+    public InHoveringGoBackState(ProfileMenu profileMenu, InMainState parentState, Controller controller, UIFiniteStateMachine stateMachine, UIHoverableText button) : base(parentState, controller, stateMachine, button)
     {
         this.profileMenu = profileMenu;
     }

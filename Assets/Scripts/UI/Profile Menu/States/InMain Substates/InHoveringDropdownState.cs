@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class InHoveringDropdownState : InMainSubState
 {
-    public InHoveringDropdownState(InMainState parentState, Controller controller, UIFiniteStateMachine stateMachine, UIHoverableItem dropdown) : base(parentState, controller, stateMachine, dropdown)
+    public InHoveringDropdownState(InMainState parentState, Controller controller, UIFiniteStateMachine stateMachine, UIHoverableText dropdown) : base(parentState, controller, stateMachine, dropdown)
     {
     }
 

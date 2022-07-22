@@ -4,23 +4,31 @@ using UnityEngine;
 
 public class MainMenuPressAnyPrompt : MonoBehaviour
 {
-    bool subscribeInStart;
+    private UIHoverableText button;
+    bool isGameStart;
+
+    private void Awake()
+    {
+        button = GetComponent<UIHoverableText>();
+    }
     private void OnEnable()
     {
-        subscribeInStart = true;
-        GetComponent<Animator>().SetBool("IsHovered", true);
+        isGameStart = true;
+
         if (PlayerManager.Instance != null)
         {
-            subscribeInStart = false;
+            isGameStart = false;
             PlayerManager.Instance.onPlayerJoined += Disappear;
         }
     }
     private void Start()
     {
-        if (subscribeInStart)
+        button.Hover();
+
+        if (isGameStart)
         {
             PlayerManager.Instance.onPlayerJoined += Disappear;
-            subscribeInStart = false;
+            isGameStart = false;
         }
     }
 

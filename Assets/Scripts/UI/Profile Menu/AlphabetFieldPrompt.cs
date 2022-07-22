@@ -137,7 +137,7 @@ public class AlphabetFieldPrompt : MonoBehaviour
         if (string.IsNullOrEmpty(currentName))
         {
             textField.SetText(enterNamePrompt);
-            textField.color = ColorPallete.inactiveText;
+            textField.color = ColorPallete.unselectedText;
         }
         else
         {
@@ -166,7 +166,6 @@ public class AlphabetFieldPrompt : MonoBehaviour
         ActivateUppercase();
 
         UpdateLabel();
-
     }
 
 

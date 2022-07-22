@@ -6,13 +6,13 @@ using UnityEngine.UI;
 
 public class UIInventoryMenu : MonoBehaviour
 {
-    [SerializeField] private UIInventoryItemTable itemsTable;
+    [SerializeField] private UIInventoryIngredientsTable ingredientsTable;
     [SerializeField] private UIIngredientDetailsPage ingredientDetailsPage;
 
     private CanvasGroup canvasGroup;
 
     private Controller controller;
-    private Inventory inventory;
+    public Inventory Inventory { get; private set; }
 
     private const int numPages = 5;
     private const int numItemsInTable = 10;
@@ -45,16 +45,11 @@ public class UIInventoryMenu : MonoBehaviour
 
     public void Initialize(Inventory inventory)
     {
-        this.inventory = inventory;
+        this.Inventory = inventory;
+        Debug.Log(inventory.gameObject.name);
 
+        ingredientsTable.Initialize(numItemsInTable);
 
-        itemsTable.Initialize(numItemsInTable);
-        inventory.onChanged += BuildPage;
-    }
-
-    private void OnDisable()
-    {
-        inventory.onChanged -= BuildPage;
     }
 
     private void Update()
@@ -71,30 +66,28 @@ public class UIInventoryMenu : MonoBehaviour
     }
     public void Show()
     {
+        ingredientsTable.Build(Inventory);
+        DisplayCurrentItemDetails();
+
         canvasGroup.alpha = 1f;
         canvasGroup.interactable = true;
         canvasGroup.blocksRaycasts = true;
     }
 
-
-    public void BuildPage()
-    {
-        Debug.Log("BUILD PAGE CALLED FROM UIINVENTORYMENU");
-        itemsTable.Build(inventory.Ingredients.GetRange(0, numItemsInTable));
-    }
-
     public void ScrollUp()
     {
-        itemsTable.ScrollUp();
+        ingredientsTable.ScrollUp();
+        DisplayCurrentItemDetails();
     }
     public void ScrollDown()
     {
-        itemsTable.ScrollDown();
+        ingredientsTable.ScrollDown();
+        DisplayCurrentItemDetails();
     }
 
     private void DisplayCurrentItemDetails()
     {
-        throw new NotImplementedException();
+        ingredientDetailsPage.DisplayIngredientDetails(ingredientsTable.CurrentHoveredIngredient);
     }
 }
 
@@ -111,6 +104,7 @@ public class UsingInventoryState : UIState
     public override void Enter()
     {
         base.Enter();
+
         menu.Show();
     }
 

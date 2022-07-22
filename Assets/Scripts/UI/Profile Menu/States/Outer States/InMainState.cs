@@ -9,12 +9,12 @@ public class InMainState : ProfileMenuState
     public InHoveringConfirmState hoveringConfirmState { get; private set; }
     public InHoveringGoBackState hoveringGoBackState { get; private set; }
 
-    public InMainState(ProfileMenu profileMenu, Controller controller, UIFiniteStateMachine stateMachine, MyDropdown dropdown, UIHoverableItem confirmButton, UIHoverableItem goBackButton) : base(profileMenu, controller, stateMachine)
+    public InMainState(ProfileMenu profileMenu, Controller controller, UIFiniteStateMachine stateMachine, MyDropdown dropdown, UIHoverableText confirmButton, UIHoverableText goBackButton) : base(profileMenu, controller, stateMachine)
     {
         innerStateMachine = new UIFiniteStateMachine();
 
         hoveringDropdownState = new InHoveringDropdownState(this, controller, innerStateMachine, dropdown);
-        hoveringConfirmState = new InHoveringConfirmState(this, controller, innerStateMachine, confirmButton);
+        hoveringConfirmState = new InHoveringConfirmState(this, controller, innerStateMachine, confirmButton, dropdown);
         hoveringGoBackState = new InHoveringGoBackState(profileMenu, this, controller, innerStateMachine, goBackButton);
 
     }
@@ -30,6 +30,7 @@ public class InMainState : ProfileMenuState
     {
         base.Exit();
 
+        hoveringDropdownState.Exit();
         hoveringConfirmState.Exit();
         hoveringGoBackState.Exit();
     }

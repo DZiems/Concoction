@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-public class MyDropdown : UIHoverableItem
+public class MyDropdown : UIHoverableText
 {
 
     [Header("Prefabs")]

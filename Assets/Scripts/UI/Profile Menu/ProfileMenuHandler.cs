@@ -9,7 +9,7 @@ using UnityEngine;
 
 public class ProfileMenuHandler : MonoBehaviour
 {
-    [SerializeField] private UIHoverableItem continueButton;
+    [SerializeField] private UIHoverableText continueButton;
     [SerializeField] private ProfileMenu profileMenu;
 
     private Player player;

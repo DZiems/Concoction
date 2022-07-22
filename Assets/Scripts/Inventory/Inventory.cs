@@ -10,12 +10,8 @@ public class Inventory : MonoBehaviour, IDataPersistence
     public const int MAX_SIZE = 50;
     private bool isInitialized;
 
-    public ulong NumIngredientsAcquired { get; private set; }
-
     public List<Ingredient> Ingredients {get; private set;} = new List<Ingredient>();
-    public List<ulong> OrdersIngredientsAcquired { get; private set;} = new List<ulong>();
 
-    public event Action onChanged;
 
     public void LoadData(GameData data)
     {
@@ -28,7 +24,7 @@ public class Inventory : MonoBehaviour, IDataPersistence
             return;
         }
 
-        Initialize(data.CurrentPlayerProfileData.inventoryData);
+        InitializeFromData(data.CurrentPlayerProfileData.inventoryData);
     }
     public void SaveData(GameData data)
     {
@@ -38,40 +34,36 @@ public class Inventory : MonoBehaviour, IDataPersistence
             return;
         }
 
-        OverwriteDataContents(data);
+        OverwriteData(data);
 
     }
 
-    private void OverwriteDataContents(GameData data)
+    private void OverwriteData(GameData data)
     {
         var ingredientDatas = new IngredientData[Ingredients.Count];
         int i = 0;
+
         foreach (var ingredient in Ingredients)
             ingredientDatas[i++] = ingredient.ToData();
 
 
-        data.CurrentPlayerProfileData.inventoryData = new InventoryData(ingredientDatas, OrdersIngredientsAcquired.ToArray(), NumIngredientsAcquired);
+        data.CurrentPlayerProfileData.inventoryData = new InventoryData(ingredientDatas);
     }
 
-    public void Initialize(InventoryData data)
+    public void InitializeFromData(InventoryData data)
     {
-        NumIngredientsAcquired = data.numIngredientsAcquired;
-
         Ingredients.Capacity = data.ingredientDatas.Length;
-        OrdersIngredientsAcquired.Capacity = data.ingredientDataOrdersAcquired.Length;
+
         foreach (var ingData in data.ingredientDatas)
-            AddItem(new Ingredient(ingData));
+            Ingredients.Add(new Ingredient(ingData));
 
-        foreach (ulong orderAcquired in data.ingredientDataOrdersAcquired)
-            OrdersIngredientsAcquired.Add(orderAcquired);
 
-        Debug.Log("Inventory Initialize(): Ingredients initialized:");
+        Debug.Log("Inventory Ingredients initialized:");
         for (int i = 0; i < Ingredients.Count; i++)
         {
-            Debug.Log($"Order Acquired: {OrdersIngredientsAcquired[i]}, ingredient: {Ingredients[i]}");
+            Debug.Log($"ingredient: {Ingredients[i]}");
         }
 
-        onChanged?.Invoke();
         isInitialized = true;
     }
 
@@ -80,11 +72,6 @@ public class Inventory : MonoBehaviour, IDataPersistence
         if (!isInitialized) return;
 
         Ingredients.Add(ingredient);
-
-        NumIngredientsAcquired++;
-        OrdersIngredientsAcquired.Add(NumIngredientsAcquired);
-
-        onChanged?.Invoke();
     }
 
     public void RemoveIngredient(int ind)
@@ -92,9 +79,6 @@ public class Inventory : MonoBehaviour, IDataPersistence
         if (!isInitialized) return;
 
         Ingredients.RemoveAt(ind);
-        OrdersIngredientsAcquired.RemoveAt(ind);
-
-        onChanged?.Invoke();
     }
 
     public void SortIngredientsByLevel()
